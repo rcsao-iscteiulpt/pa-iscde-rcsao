@@ -35,29 +35,30 @@ import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.projectbrowser.model.SourceElement;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserListener;
 
-public class TestView implements PidescoView {
+public class DocGenView implements PidescoView {
 
-	private static TestView instance;
+	private static DocGenView instance;
 
 	private Set<ClassInfoChecker> openedfiles = new HashSet();
 	private File currentopenedfile;
 	private CTabFolder folders;
 
-	public TestView() {
+	public DocGenView() {
 		instance = this;
 	}
 
-	public static TestView getInstance() {
+	public static DocGenView getInstance() {
 		return instance;
 	}
 
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
 		viewArea.setLayout(new FillLayout(SWT.VERTICAL | SWT.V_SCROLL));
 		folders = new CTabFolder(viewArea, SWT.BORDER | SWT.V_SCROLL);
-
 	}
 
 	public void openfile(ClassInfoChecker c, File file) {
+		
+		
 		currentopenedfile = file;
 		CTabItem newtab = new CTabItem(folders, SWT.CLOSE | SWT.FILL | SWT.V_SCROLL);
 
@@ -163,6 +164,12 @@ public class TestView implements PidescoView {
 
 		// Text text = new Text(newtab, SWT.NONE);
 		newtab.setText(c.getClassbasicinfo().get("ClassName").toString());
+		
+		
+		for(CTabItem tab : folders.getItems())  {
+			System.out.println(tab.toString());
+		}
+			
 	}
 
 	private void addClickListener(Table t) {
@@ -180,4 +187,10 @@ public class TestView implements PidescoView {
 		};
 		t.addListener(SWT.DefaultSelection, l);
 	}
+	
+	public void reUpdateClasses() {
+		
+	}
+	
+	
 }

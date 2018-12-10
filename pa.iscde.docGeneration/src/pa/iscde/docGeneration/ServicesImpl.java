@@ -13,18 +13,6 @@ import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
 
 public class ServicesImpl implements DemoServices {
 
-	@Override
-	public File getOpenedFile() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void selectText(File file, int offset, int length) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	
 	public void addListener(DemoListener listener) {
 		// TODO Auto-generated method stub
@@ -41,8 +29,7 @@ public class ServicesImpl implements DemoServices {
 		Assert.isNotNull(file, "file cannot be null");
 		Assert.isTrue(file.exists(), "file does not exist");
 		Assert.isTrue(!file.isDirectory(), "file is a directory");
-		
-		TestView.getInstance().openfile(c, file);
+		DocGenView.getInstance().openfile(c, file);
 	
 		
 	}

@@ -20,10 +20,8 @@ public class BrowserListenersAction extends ProjectBrowserListener.Adapter {
 
 	@Override
 	public void doubleClick(SourceElement element) {
-		System.out.println("hii");
 		if (element instanceof ClassElement) {
 			File f = ((ClassElement) element).getFile();
-			System.out.println("path-------" + f.getAbsolutePath());
 			ClassInfoChecker c = new ClassInfoChecker();
 			s.parseFile(f,c);
 			services.openFile(f,c);

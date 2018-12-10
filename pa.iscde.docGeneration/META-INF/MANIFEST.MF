@@ -10,7 +10,9 @@ Require-Bundle: org.eclipse.core.runtime,
  pt.iscte.pidesco.projectbrowser,
  org.eclipse.ui.workbench,
  org.eclipse.jdt.core,
- pt.iscte.pidesco.javaeditor
+ pt.iscte.pidesco.javaeditor,
+ org.eclipse.e4.core.di;bundle-version="1.7.100"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: pa.iscde.pidesco.docGeneration
 Bundle-ActivationPolicy: lazy
+Export-Package: pa.iscde.docGeneration.ext

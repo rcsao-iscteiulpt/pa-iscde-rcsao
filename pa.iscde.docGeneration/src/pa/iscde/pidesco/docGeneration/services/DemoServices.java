@@ -10,11 +10,6 @@ import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
 
 public interface DemoServices {
 
-
-	File getOpenedFile();
-	
-	void selectText(File file, int offset, int length);
-
 	void addListener(DemoListener listener);
 
 	void removeListener(DemoListener listener);

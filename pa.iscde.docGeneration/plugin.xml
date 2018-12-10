@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="pa.iscde.docGeneration.ext" name="Filter" schema="schema/pa.iscde.docGeneration.ext.exsd"/>
    <extension
          id="DocGenerator"
          name="DocGenerator"
          point="pt.iscte.pidesco.view">
       <view
-            class="pa.iscde.docGeneration.TestView">
+            class="pa.iscde.docGeneration.DocGenView">
       </view>
    </extension>
-
 </plugin>
