@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="DocGenerator"
+         name="DocGenerator"
+         point="pt.iscte.pidesco.view">
+      <view
+            class="pa.iscde.docGeneration.TestView">
+      </view>
+   </extension>
+
+</plugin>
