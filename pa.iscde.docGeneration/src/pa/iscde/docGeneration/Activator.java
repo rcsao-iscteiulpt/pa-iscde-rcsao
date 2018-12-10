@@ -46,7 +46,7 @@ public class Activator implements BundleActivator {
 
 		editorservice = (JavaEditorServices) context.getService(refjavaeditor);
 
-		editorservice.addListener(new ListenersActions(editorservice));
+		editorservice.addListener(new EditorListenersActions(editorservice));
 
 		ProjectBrowserServices browserservice = (ProjectBrowserServices) context.getService(refbrowser);
 		browserservice.addListener(new BrowserListenersAction(services, editorservice));
