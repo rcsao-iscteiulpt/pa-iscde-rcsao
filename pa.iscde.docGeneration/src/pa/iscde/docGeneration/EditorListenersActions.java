@@ -15,7 +15,9 @@ public class EditorListenersActions extends JavaEditorListener.Adapter {
 	}
 	
 	public void fileSaved(File file) {
-		DocGenView.getInstance();
+		ClassInfoChecker c = new ClassInfoChecker();
+		s.parseFile(file, c);
+		DocGenView.getInstance().reUpdateClass(c, file);
 	}
 
 	

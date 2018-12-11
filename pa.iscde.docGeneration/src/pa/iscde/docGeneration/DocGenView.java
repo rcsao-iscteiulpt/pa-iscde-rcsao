@@ -2,21 +2,17 @@ package pa.iscde.docGeneration;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
-
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
@@ -25,30 +21,20 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
-
 import InfoClasses.ConstructorInfo;
 import InfoClasses.FieldInfo;
 import InfoClasses.MethodInfo;
-import pa.iscde.pidesco.docGeneration.services.DemoListener;
 import pt.iscte.pidesco.extensibility.PidescoView;
-import pt.iscte.pidesco.projectbrowser.model.SourceElement;
-import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserListener;
 
 public class DocGenView implements PidescoView {
 
 	private static DocGenView instance;
 
-	private Set<ClassInfoChecker> openedfiles = new HashSet();
-	private File currentopenedfile;
+	private Map<String, File> openedfiles = new HashMap<String, File>();
 	private CTabFolder folders;
 
 	public DocGenView() {
 		instance = this;
-	}
-
-	public static DocGenView getInstance() {
-		return instance;
 	}
 
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
@@ -57,10 +43,32 @@ public class DocGenView implements PidescoView {
 	}
 
 	public void openfile(ClassInfoChecker c, File file) {
-		
-		
-		currentopenedfile = file;
+		if (openedfiles.containsKey(c.getClassbasicinfo().get("ClassName"))) {
+			for (CTabItem item : folders.getItems()) {
+				if (c.getClassbasicinfo().get("ClassName").equals(item.getText())) {
+					folders.setSelection(item);
+				}
+			}
+			return;
+		}
+
+		openedfiles.put((String) c.getClassbasicinfo().get("ClassName"), file);
+
 		CTabItem newtab = new CTabItem(folders, SWT.CLOSE | SWT.FILL | SWT.V_SCROLL);
+
+		newtab.addDisposeListener(new DisposeListener() {
+
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+
+				for (String name : openedfiles.keySet()) {
+					if (c.getClassbasicinfo().get("ClassName").equals(name)) {
+						openedfiles.remove(name);
+					}
+				}
+
+			}
+		});
 
 		Group group = new Group(folders, SWT.V_SCROLL);
 		group.setLayout(new RowLayout(SWT.VERTICAL));
@@ -128,8 +136,7 @@ public class DocGenView implements PidescoView {
 			TableItem newitem = new TableItem(constructors, SWT.NONE);
 			newitem.setText(m.getConstructorInfo());
 		}
-		
-		
+
 		addClickListener(constructors);
 
 		// Methods
@@ -157,40 +164,44 @@ public class DocGenView implements PidescoView {
 			TableItem newitem = new TableItem(methods, SWT.NONE);
 			newitem.setText(m.getMethodInfo());
 		}
-		
+
 		addClickListener(methods);
 
 		newtab.setControl(group);
 
 		// Text text = new Text(newtab, SWT.NONE);
 		newtab.setText(c.getClassbasicinfo().get("ClassName").toString());
-		
-		
-		for(CTabItem tab : folders.getItems())  {
-			System.out.println(tab.toString());
-		}
-			
+
+		folders.setSelection(newtab);
+
 	}
 
 	private void addClickListener(Table t) {
 		Listener l = new Listener() {
 			public void handleEvent(Event e) {
-				String string = "";
 				TableItem[] selection = t.getSelection();
 				String word = selection[0].toString().replaceAll("(.*)[\\{]|[\\}](.*)", "");
 				FileScanner scanner = new FileScanner();
-				int offset = scanner.ScanforWord(currentopenedfile, word);
-				System.out.println(offset);
-				scanner.Select(currentopenedfile, offset, word.length());
-				
+				File selectedfile = openedfiles.get(folders.getSelection().getText());
+				int offset = scanner.ScanforWord(selectedfile, word);
+				scanner.Select(selectedfile, offset, word.length());
 			}
 		};
 		t.addListener(SWT.DefaultSelection, l);
 	}
-	
-	public void reUpdateClasses() {
+
+	public void reUpdateClass(ClassInfoChecker c, File f) {
+		for (CTabItem item : folders.getItems()) {
+			if (c.getClassbasicinfo().get("ClassName").equals(item.getText())) {
+				item.dispose();
+			}
+		}
 		
+		openfile(c,f);
 	}
-	
-	
+
+	public static DocGenView getInstance() {
+		return instance;
+	}
+
 }
