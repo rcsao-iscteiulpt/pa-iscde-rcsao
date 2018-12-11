@@ -29,7 +29,7 @@ public class ServicesImpl implements DemoServices {
 		Assert.isNotNull(file, "file cannot be null");
 		Assert.isTrue(file.exists(), "file does not exist");
 		Assert.isTrue(!file.isDirectory(), "file is a directory");
-		DocGenView.getInstance().openfile(file, c);
+		DocGenView.getInstance().openfile(c, file);
 	
 		
 	}

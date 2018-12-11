@@ -2,12 +2,8 @@ package pa.iscde.docGeneration;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
-
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.DisposeEvent;
@@ -16,9 +12,7 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
@@ -27,31 +21,20 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
-
 import InfoClasses.ConstructorInfo;
 import InfoClasses.FieldInfo;
 import InfoClasses.MethodInfo;
-import pa.iscde.pidesco.docGeneration.services.DemoListener;
 import pt.iscte.pidesco.extensibility.PidescoView;
-import pt.iscte.pidesco.projectbrowser.model.SourceElement;
-import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserListener;
 
 public class DocGenView implements PidescoView {
 
 	private static DocGenView instance;
-
-	private Map<File , ClassInfoChecker> openedfiles = new HashMap();
-	private File currentopenedfile;
+	
+	private Map<String, File> openedfiles = new HashMap<String, File>();
 	private CTabFolder folders;
-	private boolean update = false;
 
 	public DocGenView() {
 		instance = this;
-	}
-
-	public static DocGenView getInstance() {
-		return instance;
 	}
 
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
@@ -59,23 +42,31 @@ public class DocGenView implements PidescoView {
 		folders = new CTabFolder(viewArea, SWT.BORDER | SWT.V_SCROLL);
 	}
 
-	public void openfile(File file,ClassInfoChecker classinfo) {
-		openedfiles.put(file, classinfo);
-		
+	public void openfile(ClassInfoChecker c, File file) {
+		if (openedfiles.containsKey(c.getClassbasicinfo().get("ClassName"))) {
+			for (CTabItem item : folders.getItems()) {
+				if (c.getClassbasicinfo().get("ClassName").equals(item.getText())) {
+					folders.setSelection(item);
+				}
+			}
+			return;
+		}
+
+		openedfiles.put((String) c.getClassbasicinfo().get("ClassName"), file);
+
 		CTabItem newtab = new CTabItem(folders, SWT.CLOSE | SWT.FILL | SWT.V_SCROLL);
+
 		newtab.addDisposeListener(new DisposeListener() {
+
 			@Override
 			public void widgetDisposed(DisposeEvent e) {
-				System.out.println(newtab.getText()); 
-				if(!update) {
-					for(File f : openedfiles.keySet()) {
-						if(openedfiles.get(f).getClassbasicinfo().get("ClassName")
-								.equals(newtab.getText()))
-							openedfiles.remove(openedfiles.get(f));
+
+				for (String name : openedfiles.keySet()) {
+					if (c.getClassbasicinfo().get("ClassName").equals(name)) {
+						openedfiles.remove(name);
 					}
-					
 				}
-				
+
 			}
 		});
 
@@ -84,13 +75,13 @@ public class DocGenView implements PidescoView {
 
 		// Class
 		Label classlabel = new Label(group, SWT.FILL);
-		classlabel.setText("Class " + classinfo.getClassbasicinfo().get("ClassName"));
+		classlabel.setText("Class " + c.getClassbasicinfo().get("ClassName"));
 		FontData[] classfD = classlabel.getFont().getFontData();
 		classfD[0].setHeight(18);
 		classlabel.setFont(new Font(folders.getDisplay(), classfD[0]));
 
 		Label modlabel = new Label(group, SWT.FILL);
-		modlabel.setText("Modifiers: " + classinfo.getClassbasicinfo().get("Modifiers"));
+		modlabel.setText("Modifiers: " + c.getClassbasicinfo().get("Modifiers"));
 		FontData[] modfD = modlabel.getFont().getFontData();
 		modfD[0].setHeight(18);
 		modlabel.setFont(new Font(folders.getDisplay(), modfD[0]));
@@ -116,7 +107,7 @@ public class DocGenView implements PidescoView {
 		fieldtc1.setWidth(400);
 		fieldtc2.setWidth(400);
 
-		for (FieldInfo f : classinfo.getClassfields()) {
+		for (FieldInfo f : c.getClassfields()) {
 			TableItem newitem = new TableItem(fields, SWT.NONE);
 			newitem.setText(f.getFieldInfo());
 		}
@@ -141,12 +132,11 @@ public class DocGenView implements PidescoView {
 		constructortc1.setWidth(400);
 		constructortc2.setWidth(400);
 
-		for (ConstructorInfo m : classinfo.getClassconstructors()) {
+		for (ConstructorInfo m : c.getClassconstructors()) {
 			TableItem newitem = new TableItem(constructors, SWT.NONE);
 			newitem.setText(m.getConstructorInfo());
 		}
-		
-		
+
 		addClickListener(constructors);
 
 		// Methods
@@ -170,48 +160,50 @@ public class DocGenView implements PidescoView {
 		tc2.setWidth(400);
 		tc3.setWidth(200);
 
-		for (MethodInfo m : classinfo.getClassmethods()) {
+		for (MethodInfo m : c.getClassmethods()) {
 			TableItem newitem = new TableItem(methods, SWT.NONE);
 			newitem.setText(m.getMethodInfo());
 		}
-		
+
 		addClickListener(methods);
 
 		newtab.setControl(group);
 
 		// Text text = new Text(newtab, SWT.NONE);
-		newtab.setText(classinfo.getClassbasicinfo().get("ClassName").toString());
-		
-		
-		openedfiles.put(file, classinfo);
-			
+
+		newtab.setText(c.getClassbasicinfo().get("ClassName").toString());
+
+		folders.setSelection(newtab);
+
 	}
 
 	private void addClickListener(Table t) {
 		Listener l = new Listener() {
 			public void handleEvent(Event e) {
-				String string = "";
 				TableItem[] selection = t.getSelection();
 				String word = selection[0].toString().replaceAll("(.*)[\\{]|[\\}](.*)", "");
 				FileScanner scanner = new FileScanner();
-				int offset = scanner.ScanforWord(currentopenedfile, word);
-				scanner.Select(currentopenedfile, offset, word.length());
+
+				File selectedfile = openedfiles.get(folders.getSelection().getText());
+				int offset = scanner.ScanforWord(selectedfile, word);
+				scanner.Select(selectedfile, offset, word.length());
 			}
 		};
 		t.addListener(SWT.DefaultSelection, l);
 	}
-	
-	public void reUpdateClasses() {
-		update = true;
-		for(CTabItem c : folders.getItems()) {
-			c.dispose();
+
+	public void reUpdateClass(ClassInfoChecker c, File f) {
+		for (CTabItem item : folders.getItems()) {
+			if (c.getClassbasicinfo().get("ClassName").equals(item.getText())) {
+				item.dispose();
+			}
 		}
-		for(File f: openedfiles.keySet()) {
-			openfile(f,openedfiles.get(f));
-		}
-		update = false;
 		
+		openfile(c,f);
 	}
-	
-	
+
+	public static DocGenView getInstance() {
+		return instance;
+	}
+
 }
