@@ -3,7 +3,7 @@
 <schema targetNamespace="pa.iscde.docGeneration" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="pa.iscde.docGeneration" id="pa.iscde.docGeneration.ext" name="Filter"/>
+         <meta.schema plugin="pa.iscde.docGeneration" id="pa.iscde.docGeneration.ext" name="DocGen"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]
@@ -17,8 +17,9 @@
          </appinfo>
       </annotation>
       <complexType>
-         <choice minOccurs="1" maxOccurs="unbounded">
-         </choice>
+         <sequence>
+            <element ref="client"/>
+         </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
                <documentation>
@@ -41,6 +42,18 @@
                <appinfo>
                   <meta.attribute translatable="true"/>
                </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="client">
+      <complexType>
+         <attribute name="StringName" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
             </annotation>
          </attribute>
       </complexType>

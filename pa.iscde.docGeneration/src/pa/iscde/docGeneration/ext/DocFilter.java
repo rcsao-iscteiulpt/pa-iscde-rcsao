@@ -1,6 +1,6 @@
 package pa.iscde.docGeneration.ext;
 
-public interface Filter {
+public interface DocFilter {
 	
 	 void accept();
 }

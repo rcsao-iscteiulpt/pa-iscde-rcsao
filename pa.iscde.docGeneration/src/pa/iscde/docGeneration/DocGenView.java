@@ -3,6 +3,12 @@ package pa.iscde.docGeneration;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
+
+import org.eclipse.core.runtime.IConfigurationElement;
+
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -24,7 +30,9 @@ import org.eclipse.swt.widgets.TableItem;
 import InfoClasses.ConstructorInfo;
 import InfoClasses.FieldInfo;
 import InfoClasses.MethodInfo;
+import pa.iscde.docGeneration.ext.EvaluateContributionsHandler;
 import pt.iscte.pidesco.extensibility.PidescoView;
+
 
 public class DocGenView implements PidescoView {
 
@@ -32,15 +40,20 @@ public class DocGenView implements PidescoView {
 	
 	private Map<String, File> openedfiles = new HashMap<String, File>();
 	private CTabFolder folders;
-
+//	private static final String EXT_POINT_FILTER = "pa.iscde.docGeneration.ext";
+	private EvaluateContributionsHandler e = new EvaluateContributionsHandler();
+	
 	public DocGenView() {
-		instance = this;
+		instance = this;	
 	}
 
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
 		viewArea.setLayout(new FillLayout(SWT.VERTICAL | SWT.V_SCROLL));
 		folders = new CTabFolder(viewArea, SWT.BORDER | SWT.V_SCROLL);
+		
+		//loadFilters1();
 	}
+	
 
 	public void openfile(ClassInfoChecker c, File file) {
 		if (openedfiles.containsKey(c.getClassbasicinfo().get("ClassName"))) {
@@ -64,6 +77,7 @@ public class DocGenView implements PidescoView {
 				for (String name : openedfiles.keySet()) {
 					if (c.getClassbasicinfo().get("ClassName").equals(name)) {
 						openedfiles.remove(name);
+						break;
 					}
 				}
 
@@ -96,6 +110,8 @@ public class DocGenView implements PidescoView {
 		Table fields = new Table(group, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 		fields.setLinesVisible(true);
 		fields.setHeaderVisible(true);
+		
+		
 
 		addClickListener(fields);
 
@@ -127,6 +143,8 @@ public class DocGenView implements PidescoView {
 		TableColumn constructortc1 = new TableColumn(constructors, SWT.CENTER | SWT.BORDER);
 		TableColumn constructortc2 = new TableColumn(constructors, SWT.CENTER | SWT.BORDER);
 
+	    
+		
 		constructortc1.setText("Constructor");
 		constructortc2.setText("Modifiers");
 		constructortc1.setWidth(400);

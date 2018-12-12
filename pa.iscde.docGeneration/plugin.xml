@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="pa.iscde.docGeneration.ext" name="Filter" schema="schema/pa.iscde.docGeneration.ext.exsd"/>
+   <extension-point id="pa.iscde.docGeneration.ext" name="DocGen" schema="schema/pa.iscde.docGeneration.ext.exsd"/>
    <extension
          id="DocGenerator"
          name="DocGenerator"
