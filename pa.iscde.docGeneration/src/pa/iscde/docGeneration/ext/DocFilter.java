@@ -1,6 +1,9 @@
 package pa.iscde.docGeneration.ext;
 
+import InfoClasses.ConstructorInfo;
+
 public interface DocFilter {
 	
-	 void accept();
+	 boolean accept(ConstructorInfo c);
+	 
 }

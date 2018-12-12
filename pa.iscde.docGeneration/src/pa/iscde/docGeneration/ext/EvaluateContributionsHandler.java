@@ -13,7 +13,7 @@ public class EvaluateContributionsHandler {
 	public EvaluateContributionsHandler() {
 		System.out.println(config.length);
 		for (IConfigurationElement e : config) {
-			System.out.println(e.getAttribute("Faggot"));
+			System.out.println(e);
 
 		}
 	}

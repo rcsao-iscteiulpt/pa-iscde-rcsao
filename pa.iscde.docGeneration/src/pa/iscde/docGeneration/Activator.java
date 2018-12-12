@@ -5,7 +5,7 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
 import org.osgi.framework.ServiceReference;
-import pa.iscde.pidesco.docGeneration.services.DemoServices;
+import pa.iscde.pidesco.docGeneration.services.DocGenServices;
 import pt.iscte.pidesco.extensibility.PidescoServices;
 
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
@@ -15,30 +15,21 @@ import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 public class Activator implements BundleActivator {
 
 	private static Activator instance;
-
-	private BundleContext context;
 	private JavaEditorServices editorservice;
-	private DemoServices services;
 
+	
 	public static Activator getInstance() {
 		return instance;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
-	 */
 	public void start(BundleContext context) throws Exception {
 		instance = this;
-		this.context = context;
 
 		ServiceReference<PidescoServices> ref = context.getServiceReference(PidescoServices.class);
 		PidescoServices pidescoServices = context.getService(ref);
 
-		services = new ServicesImpl();
-		context.registerService(DemoServices.class, services, null);
+		DocGenServices services = new ServicesImpl();
+		context.registerService(DocGenServices.class, services, null);
 
 		ServiceReference<ProjectBrowserServices> refbrowser = context.getServiceReference(ProjectBrowserServices.class);
 
@@ -49,16 +40,15 @@ public class Activator implements BundleActivator {
 		editorservice.addListener(new EditorListenersActions(editorservice));
 
 		ProjectBrowserServices browserservice = (ProjectBrowserServices) context.getService(refbrowser);
-		browserservice.addListener(new BrowserListenersAction(services, editorservice));
+		browserservice.addListener(new BrowserListenersAction(services));
 
 	}
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
-	 */
 
+
+	/**
+	 * Getter for the JavaEditor's Services
+	 * @return
+	 */
 	public JavaEditorServices getEditorservice() {
 		return editorservice;
 	}

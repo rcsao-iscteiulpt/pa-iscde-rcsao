@@ -32,6 +32,7 @@ import InfoClasses.FieldInfo;
 import InfoClasses.MethodInfo;
 import pa.iscde.docGeneration.ext.EvaluateContributionsHandler;
 import pt.iscte.pidesco.extensibility.PidescoView;
+import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
 
 public class DocGenView implements PidescoView {
@@ -41,6 +42,7 @@ public class DocGenView implements PidescoView {
 	private Map<String, File> openedfiles = new HashMap<String, File>();
 	private CTabFolder folders;
 //	private static final String EXT_POINT_FILTER = "pa.iscde.docGeneration.ext";
+	private JavaEditorServices editorservice;
 	private EvaluateContributionsHandler e = new EvaluateContributionsHandler();
 	
 	public DocGenView() {
@@ -55,7 +57,11 @@ public class DocGenView implements PidescoView {
 	}
 	
 
-	public void openfile(ClassInfoChecker c, File file) {
+	public void openfile(File file) {
+		ClassInfoChecker c = new ClassInfoChecker();
+		JavaEditorServices s = Activator.getInstance().getEditorservice();
+		s.parseFile(file, c);
+		
 		if (openedfiles.containsKey(c.getClassbasicinfo().get("ClassName"))) {
 			for (CTabItem item : folders.getItems()) {
 				if (c.getClassbasicinfo().get("ClassName").equals(item.getText())) {
@@ -217,7 +223,7 @@ public class DocGenView implements PidescoView {
 			}
 		}
 		
-		openfile(c,f);
+		openfile(f);
 	}
 
 	public static DocGenView getInstance() {

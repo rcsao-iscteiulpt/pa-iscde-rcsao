@@ -24,6 +24,10 @@ public class FieldInfo {
 	}
 
 
+	/**
+	 * 
+	 * @return 
+	 */
 	public String[] getFieldInfo() {
 	String[] g = new String[] {"","",""};
 		
