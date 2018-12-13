@@ -9,13 +9,18 @@ public class EvaluateContributionsHandler {
 	private static final String EXT_POINT_FILTER = "pa.iscde.docGeneration.ext";
 	private IExtensionRegistry registry = Platform.getExtensionRegistry();
 	private IConfigurationElement[] config = registry.getConfigurationElementsFor(EXT_POINT_FILTER);
+	private String word = null;
 
 	public EvaluateContributionsHandler() {
 		System.out.println(config.length);
 		for (IConfigurationElement e : config) {
-			System.out.println(e);
+			word = e.getAttribute("StringName");
 
 		}
+	}
+
+	public String getWord() {
+		return word;
 	}
 
 //    

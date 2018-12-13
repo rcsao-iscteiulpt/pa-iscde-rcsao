@@ -1,5 +1,6 @@
 package pa.iscde.docGeneration;
 
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,7 +8,7 @@ import java.util.Map;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.Modifier;
+
 
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.swt.graphics.Image;
@@ -15,6 +16,7 @@ import org.eclipse.swt.graphics.Image;
 import InfoClasses.ConstructorInfo;
 import InfoClasses.FieldInfo;
 import InfoClasses.MethodInfo;
+import InfoClasses.Modifiers;
 
 
 public class ClassInfoChecker extends ASTVisitor {
@@ -59,21 +61,23 @@ public class ClassInfoChecker extends ASTVisitor {
 	}
 	*/
 
-	public ArrayList<String> getModifiersList(int modifiers) {
-		ArrayList<String> modifierslist = new ArrayList<>();
+	public ArrayList<Modifiers> getModifiersList(int modifiers) {
+		ArrayList<Modifiers> modifierslist = new ArrayList<Modifiers>();
 
 		if (Modifier.isPublic(modifiers))
-			modifierslist.add("Public");
+			modifierslist.add(Modifiers.Public);
 		if (Modifier.isProtected(modifiers))
-			modifierslist.add("Protected");
+			modifierslist.add(Modifiers.Protected);
 		if (Modifier.isPrivate(modifiers))
-			modifierslist.add("Private");
+			modifierslist.add(Modifiers.Private);
 		if (Modifier.isAbstract(modifiers))
-			modifierslist.add("abstract");
+			modifierslist.add(Modifiers.Abstract);
 		if (Modifier.isStatic(modifiers))
-			modifierslist.add("Static");
+			modifierslist.add(Modifiers.Static);
 		if (Modifier.isFinal(modifiers))
-			modifierslist.add("Final");
+			modifierslist.add(Modifiers.Final);
+		if (Modifier.isSynchronized(modifiers))
+			modifierslist.add(Modifiers.Synchronized);
 
 		return modifierslist;
 

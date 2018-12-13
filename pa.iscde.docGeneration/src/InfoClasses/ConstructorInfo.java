@@ -6,12 +6,13 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 
 public class ConstructorInfo {
 
-	private String name;
-	private Object parameters;
-	private ArrayList<String> modifiers;
+	private final String name;
+	private final Object parameters;
+	private final ArrayList<Modifiers> modifiers;
 	
 	
-	public ConstructorInfo(MethodDeclaration node, ArrayList<String> modifiers) {
+	
+	public ConstructorInfo(MethodDeclaration node, ArrayList<Modifiers> modifiers) {
 		this.name = node.getName().toString();
 		this.parameters = node.parameters();
 		this.modifiers = modifiers;
@@ -29,13 +30,30 @@ public class ConstructorInfo {
 		}
 		g[0] = g[0].replaceAll(", $", "") + ")";
 		
-		for(String g1: modifiers) 
+		for(Modifiers g1: modifiers) 
 			g[1] += g1 + ", ";
 		g[1] = g[1].replaceAll(", $", "");
 	
 		return g;
 	}
 		
-	
+	public String getName() {
+		return name;
+	}
+
+
+
+
+	public Object getParameters() {
+		return parameters;
+	}
+
+
+
+
+	public ArrayList<Modifiers> getModifiers() {
+		return modifiers;
+	}
+
 	
 }

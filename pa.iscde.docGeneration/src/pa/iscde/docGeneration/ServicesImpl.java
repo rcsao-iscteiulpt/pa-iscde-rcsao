@@ -3,11 +3,8 @@ package pa.iscde.docGeneration;
 import java.io.File;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.jdt.core.compiler.IProblem;
-import org.eclipse.jdt.core.dom.ASTVisitor;
-
+import InfoClasses.Modifiers;
 import pa.iscde.pidesco.docGeneration.services.DocGenServices;
-import pt.iscte.pidesco.javaeditor.service.JavaEditorListener;
 
 
 public class ServicesImpl implements DocGenServices {
@@ -25,6 +22,14 @@ public class ServicesImpl implements DocGenServices {
 	@Override
 	public File getopenedFile() {
 		return null;
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void filterModifier(String filterword) {
 		// TODO Auto-generated method stub
 		
 	}
