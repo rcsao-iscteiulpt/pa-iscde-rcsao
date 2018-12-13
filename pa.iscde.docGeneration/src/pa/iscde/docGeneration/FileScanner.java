@@ -24,6 +24,8 @@ public class FileScanner {
 				}
 				offset += 2;
 			}
+			
+			br.close();
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

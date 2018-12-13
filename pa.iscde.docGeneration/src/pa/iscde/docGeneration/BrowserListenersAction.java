@@ -2,7 +2,7 @@ package pa.iscde.docGeneration;
 
 import java.io.File;
 
-import pa.iscde.pidesco.docGeneration.services.DocGenServices;
+import pa.iscde.docGeneration.ext.DocGenServices;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.model.ClassElement;
 import pt.iscte.pidesco.projectbrowser.model.SourceElement;

@@ -31,6 +31,7 @@ import InfoClasses.FieldInfo;
 import InfoClasses.MethodInfo;
 
 import pa.iscde.docGeneration.ext.EvaluateContributionsHandler;
+import pa.iscde.javaTasks.ext.TasksServices;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
@@ -54,13 +55,15 @@ public class DocGenView implements PidescoView {
 		this.editorservice = Activator.getInstance().getEditorservice();
 		FillLayout lay = new FillLayout(SWT.VERTICAL);
 		//activefilters.add("private");
-		activefilters.add("StaTiC");
+		//activefilters.add("StatiC");
 		viewArea.setLayout(lay);
 
 		// Filter Checks
 		Composite filterscomp = new Composite(viewArea, SWT.NONE);
+		filterscomp.setLayout(new FillLayout());
+		Group g = new Group(filterscomp, SWT.NONE);
 
-		Button check1 = new Button(filterscomp, SWT.CHECK);
+		Button check1 = new Button(filterscomp, SWT.CHECK | SWT.CENTER);
 		check1.setText("Text");
 		checks.add(check1);
 		Button check2 = new Button(filterscomp, SWT.CHECK);
@@ -94,13 +97,14 @@ public class DocGenView implements PidescoView {
 	}
 
 
-	public void updateFile(ClassInfoChecker c, File f) {
+	public void updateAllFile(ClassInfoChecker c, File f) {
+		Activator.getInstance().getTaskservice().update();
 		for (MyCTabItem item : openedfiles.keySet()) {
-			if (c.getClassbasicinfo().get("ClassName").equals(item.getText())) {
 				item.drawTables(c);
-			}
 		}
 	}
+	
+	
 
 	public void addFilter(String g) {
 		activefilters.add(g);
@@ -110,6 +114,10 @@ public class DocGenView implements PidescoView {
 		return instance;
 	}
 
+	public File getSelectedFile() {
+		return openedfiles.get(folders.getSelection());
+	}
+	
 	private class MyCTabItem extends CTabItem {
 
 		private String name;

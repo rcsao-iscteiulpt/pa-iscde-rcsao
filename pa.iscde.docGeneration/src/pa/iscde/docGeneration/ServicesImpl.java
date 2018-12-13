@@ -4,7 +4,7 @@ import java.io.File;
 
 import org.eclipse.core.runtime.Assert;
 import InfoClasses.Modifiers;
-import pa.iscde.pidesco.docGeneration.services.DocGenServices;
+import pa.iscde.docGeneration.ext.DocGenServices;
 
 
 public class ServicesImpl implements DocGenServices {
@@ -20,8 +20,8 @@ public class ServicesImpl implements DocGenServices {
 	
 
 	@Override
-	public File getopenedFile() {
-		return null;
+	public File getSelectedFile() {
+		return DocGenView.getInstance().getSelectedFile();
 		// TODO Auto-generated method stub
 		
 	}

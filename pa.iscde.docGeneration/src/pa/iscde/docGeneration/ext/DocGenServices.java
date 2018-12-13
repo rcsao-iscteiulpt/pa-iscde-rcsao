@@ -1,4 +1,4 @@
-package pa.iscde.pidesco.docGeneration.services;
+package pa.iscde.docGeneration.ext;
 
 import java.io.File;
 
@@ -14,11 +14,11 @@ public interface DocGenServices {
 	 */
 	void openFile(File f);
 	
-	/**
+	/** Still isnt implemented!!!!!!!!!!
 	 * Get the selected file on the viewer
 	 * @return a reference for the selected file, or null if it doesn't exists
 	 */
-	File getopenedFile();
+	File getSelectedFile();
 	
 	
 	void filterModifier(String filterword);

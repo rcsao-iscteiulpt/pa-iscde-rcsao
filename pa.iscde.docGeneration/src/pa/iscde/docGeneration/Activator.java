@@ -5,8 +5,9 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
 import org.osgi.framework.ServiceReference;
-import pa.iscde.pidesco.docGeneration.services.DocGenServices;
 
+import pa.iscde.docGeneration.ext.DocGenServices;
+import pa.iscde.javaTasks.ext.TasksServices;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
@@ -14,6 +15,7 @@ public class Activator implements BundleActivator {
 
 	private static Activator instance;
 	private JavaEditorServices editorservice;
+	private TasksServices taskservice;
 
 	
 	public static Activator getInstance() {
@@ -26,19 +28,32 @@ public class Activator implements BundleActivator {
 		DocGenServices services = new ServicesImpl();
 		context.registerService(DocGenServices.class, services, null);
 
-		ServiceReference<ProjectBrowserServices> refbrowser = context.getServiceReference(ProjectBrowserServices.class);
+		ServiceReference<ProjectBrowserServices> refBrowser = context.getServiceReference(ProjectBrowserServices.class);
+		
+		ServiceReference<TasksServices> refTasks = context.getServiceReference(TasksServices.class);
 
-		ServiceReference<JavaEditorServices> refjavaeditor = context.getServiceReference(JavaEditorServices.class);
+		ServiceReference<JavaEditorServices> refJavaEditor = context.getServiceReference(JavaEditorServices.class);
+		
+		taskservice = context.getService(refTasks);
+		
+		
 
-		editorservice = (JavaEditorServices) context.getService(refjavaeditor);
+		editorservice = (JavaEditorServices) context.getService(refJavaEditor);
 
 		editorservice.addListener(new EditorListenersActions(editorservice));
 
-		ProjectBrowserServices browserservice = (ProjectBrowserServices) context.getService(refbrowser);
+		ProjectBrowserServices browserservice = (ProjectBrowserServices) context.getService(refBrowser);
 		browserservice.addListener(new BrowserListenersAction(services));
+		
+		
+		
 
 	}
 
+
+	public TasksServices getTaskservice() {
+		return taskservice;
+	}
 
 	/**
 	 * Getter for the JavaEditor's Services
@@ -52,5 +67,6 @@ public class Activator implements BundleActivator {
 		context = null;
 		instance = null;
 	}
+
 
 }
