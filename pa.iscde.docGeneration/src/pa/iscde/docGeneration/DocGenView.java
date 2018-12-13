@@ -1,9 +1,10 @@
 package pa.iscde.docGeneration;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -35,39 +36,48 @@ public class DocGenView implements PidescoView {
 
 	private static DocGenView instance;
 
-	private Map<String, File> openedfiles = new HashMap<String, File>();
+	private Map<MyCTabItem, File> openedfiles = new HashMap<MyCTabItem, File>();
 	private CTabFolder folders;
 	private JavaEditorServices editorservice;
 	private EvaluateContributionsHandler e = new EvaluateContributionsHandler();
-	private ArrayList<String> activefilters = new ArrayList<String>();
+	private Set<String> activefilters = new HashSet<String>();
 
 	public DocGenView() {
 		instance = this;
 	}
 
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
-		viewArea.setLayout(new FillLayout(SWT.VERTICAL | SWT.V_SCROLL));
+		FillLayout lay = new FillLayout(SWT.VERTICAL);
+		viewArea.setLayout(lay);
+		// Filter Checks
+		Composite comp = new Composite(viewArea, SWT.NONE);
+
+		editorservice = Activator.getInstance().getEditorservice();
+
 		folders = new CTabFolder(viewArea, SWT.BORDER | SWT.V_SCROLL);
 		folders.setLayout(new FillLayout());
-		editorservice = Activator.getInstance().getEditorservice();
 	}
 
 	public void openfile(File file) {
 		ClassInfoChecker c = new ClassInfoChecker();
 		editorservice.parseFile(file, c);
 
-		if (openedfiles.containsKey(c.getClassbasicinfo().get("ClassName"))) {
-			for (CTabItem item : folders.getItems()) {
-				if (c.getClassbasicinfo().get("ClassName").equals(item.getText())) {
-					folders.setSelection(item);
-				}
+		for (MyCTabItem item : openedfiles.keySet()) {
+			if (item.name.equalsIgnoreCase((String) c.getClassbasicinfo().get("ClassName"))) {
+				folders.setSelection(item);
+				return;
 			}
-			return;
 		}
 
-		openedfiles.put((String) c.getClassbasicinfo().get("ClassName"), file);
-
 		MyCTabItem newtab = new MyCTabItem(folders, SWT.CLOSE | SWT.V_SCROLL, c);
+
+		folders.setSelection(newtab);
+
+		openedfiles.put(newtab, file);
+
+		for (MyCTabItem item : openedfiles.keySet()) {
+			// System.out.println(item.name);
+		}
 
 	}
 
@@ -85,14 +95,16 @@ public class DocGenView implements PidescoView {
 		t.addListener(SWT.DefaultSelection, l);
 	}
 
-	public void reUpdateFile(ClassInfoChecker c, File f) {
-		for (CTabItem item : folders.getItems()) {
+	public void UpdateFile(ClassInfoChecker c, File f) {
+		for (MyCTabItem item : openedfiles.keySet()) {
 			if (c.getClassbasicinfo().get("ClassName").equals(item.getText())) {
-				item.dispose();
+				item.drawTables(c);
 			}
 		}
+	}
 
-		openfile(f);
+	public void addFilter(String g) {
+		activefilters.add(g);
 	}
 
 	public static DocGenView getInstance() {
@@ -101,29 +113,39 @@ public class DocGenView implements PidescoView {
 
 	private class MyCTabItem extends CTabItem {
 
+		private String name;
 		private Table fields;
 		private Table constructors;
 		private Table methods;
 
 		public MyCTabItem(CTabFolder parent, int style, ClassInfoChecker c) {
 			super(parent, style);
+			this.name = c.getClassbasicinfo().get("ClassName").toString();
 
-			DocFilter filter = new DocFilter(e.getWord());
+			
 
 			this.addDisposeListener(new DisposeListener() {
 
 				@Override
 				public void widgetDisposed(DisposeEvent e) {
-
-					for (String name : openedfiles.keySet()) {
-						if (c.getClassbasicinfo().get("ClassName").equals(name)) {
-							openedfiles.remove(name);
+					for (MyCTabItem item : openedfiles.keySet()) {
+						if (c.getClassbasicinfo().get("ClassName").equals(item.name)) {
+							openedfiles.remove(item);
 							break;
 						}
 					}
 				}
 			});
+			
+			
+			drawTables(c);
 
+			
+		}
+		
+		private void drawTables(ClassInfoChecker c) {
+			DocFilter filter = new DocFilter(e.getWord());
+			
 			Group group = new Group(folders, SWT.V_SCROLL);
 			group.setLayout(new RowLayout(SWT.VERTICAL));
 
@@ -230,9 +252,8 @@ public class DocGenView implements PidescoView {
 
 			this.setControl(group);
 
-			this.setText(c.getClassbasicinfo().get("ClassName").toString());
+			this.setText(name);
 
-			folders.setSelection(this);
 		}
 
 	}
