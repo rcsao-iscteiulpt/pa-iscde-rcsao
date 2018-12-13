@@ -33,6 +33,7 @@ public class DocFilter implements Filter {
 
 	@Override
 	public boolean accept(MethodInfo c) {
+		
 		for (String s : filterwords) {
 			for (Modifiers mod : c.getModifiers()) {
 				if (mod.toString().equalsIgnoreCase(s))
@@ -58,4 +59,6 @@ public class DocFilter implements Filter {
 		}
 		return false;
 	}
+	
+	
 }

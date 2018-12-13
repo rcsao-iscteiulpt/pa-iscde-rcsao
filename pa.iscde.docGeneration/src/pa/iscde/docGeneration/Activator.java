@@ -6,10 +6,8 @@ import org.osgi.framework.BundleContext;
 
 import org.osgi.framework.ServiceReference;
 import pa.iscde.pidesco.docGeneration.services.DocGenServices;
-import pt.iscte.pidesco.extensibility.PidescoServices;
 
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
-import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserListener;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
 public class Activator implements BundleActivator {
@@ -24,9 +22,6 @@ public class Activator implements BundleActivator {
 
 	public void start(BundleContext context) throws Exception {
 		instance = this;
-
-		ServiceReference<PidescoServices> ref = context.getServiceReference(PidescoServices.class);
-		PidescoServices pidescoServices = context.getService(ref);
 
 		DocGenServices services = new ServicesImpl();
 		context.registerService(DocGenServices.class, services, null);
