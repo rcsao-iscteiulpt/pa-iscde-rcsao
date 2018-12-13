@@ -50,7 +50,7 @@ public class DocGenView implements PidescoView {
 		FillLayout lay = new FillLayout(SWT.VERTICAL);
 		viewArea.setLayout(lay);
 		// Filter Checks
-		Composite comp = new Composite(viewArea, SWT.NONE);
+		Composite Filters = new Composite(viewArea, SWT.NONE);
 
 		editorservice = Activator.getInstance().getEditorservice();
 
@@ -95,7 +95,7 @@ public class DocGenView implements PidescoView {
 		t.addListener(SWT.DefaultSelection, l);
 	}
 
-	public void UpdateFile(ClassInfoChecker c, File f) {
+	public void updateFile(ClassInfoChecker c, File f) {
 		for (MyCTabItem item : openedfiles.keySet()) {
 			if (c.getClassbasicinfo().get("ClassName").equals(item.getText())) {
 				item.drawTables(c);
@@ -122,8 +122,6 @@ public class DocGenView implements PidescoView {
 			super(parent, style);
 			this.name = c.getClassbasicinfo().get("ClassName").toString();
 
-			
-
 			this.addDisposeListener(new DisposeListener() {
 
 				@Override
@@ -144,7 +142,7 @@ public class DocGenView implements PidescoView {
 		}
 		
 		private void drawTables(ClassInfoChecker c) {
-			DocFilter filter = new DocFilter(e.getWord());
+			DocFilter filter = new DocFilter(activefilters);
 			
 			Group group = new Group(folders, SWT.V_SCROLL);
 			group.setLayout(new RowLayout(SWT.VERTICAL));
