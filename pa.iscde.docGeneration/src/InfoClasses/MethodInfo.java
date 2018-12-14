@@ -23,7 +23,7 @@ public class MethodInfo {
 		String[] g = new String[] {"","",""};
 		
 		g[0] += name +"(";
-		for(Object o: (Iterable)parameters) {
+		for(Object o: (Iterable<?>)parameters) {
 			g[0] += o + ", ";
 		}
 		g[0] = g[0].replaceAll(", $", "") + ")";

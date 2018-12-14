@@ -13,10 +13,8 @@ public class EvaluateContributionsHandler {
 	private IConfigurationElement[] config = registry.getConfigurationElementsFor(EXT_POINT_FILTER);
 
 	public EvaluateContributionsHandler() {
-		//System.out.println(config.length);
 		for (IConfigurationElement e : config) {
-			//DocGenView.getInstance().addFilter(e.getAttribute("StringName"));
-
+			DocGenView.getInstance().addFilter(e.getAttribute("StringName"));
 		}
 	}
 

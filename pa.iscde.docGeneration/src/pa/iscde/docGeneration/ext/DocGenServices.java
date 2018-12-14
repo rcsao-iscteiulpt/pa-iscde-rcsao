@@ -2,7 +2,6 @@ package pa.iscde.docGeneration.ext;
 
 import java.io.File;
 
-import InfoClasses.Modifiers;
 
 
 public interface DocGenServices {
@@ -14,7 +13,7 @@ public interface DocGenServices {
 	 */
 	void openFile(File f);
 	
-	/** Still isnt implemented!!!!!!!!!!
+	/**
 	 * Get the selected file on the viewer
 	 * @return a reference for the selected file, or null if it doesn't exists
 	 */

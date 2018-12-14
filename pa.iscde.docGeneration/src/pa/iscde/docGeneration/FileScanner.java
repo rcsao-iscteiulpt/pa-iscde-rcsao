@@ -11,6 +11,7 @@ public class FileScanner {
 	public int ScanforWord(File f, String word) {
 		int offset = 0;
 		try {
+			@SuppressWarnings("resource")
 			BufferedReader br = new BufferedReader(new FileReader(f));
 
 			String line;

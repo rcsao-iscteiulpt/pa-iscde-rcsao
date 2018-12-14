@@ -3,7 +3,6 @@ package pa.iscde.docGeneration;
 import java.io.File;
 
 import org.eclipse.core.runtime.Assert;
-import InfoClasses.Modifiers;
 import pa.iscde.docGeneration.ext.DocGenServices;
 
 
