@@ -28,6 +28,12 @@ public class DocFilter implements Filter {
 			if(c.getName().equalsIgnoreCase(s)) {
 				matches++;			
 			}
+			
+			for(Object o: (Iterable<?>) c.getParameters()) {
+				String[] temp = o.toString().split(" ");
+				if(temp[0].equalsIgnoreCase(s) || temp[1].equalsIgnoreCase(s))
+					matches++;
+			}
 		}
 		
 		if(matches == filterwords.size())
@@ -46,6 +52,12 @@ public class DocFilter implements Filter {
 			}	
 			if(c.getReturntype().equalsIgnoreCase(s) || c.getName().equalsIgnoreCase(s)) {
 				matches++;				
+			}
+			
+			for(Object o: (Iterable<?>) c.getParameters()) {
+				String[] temp = o.toString().split(" ");
+				if(temp[0].equalsIgnoreCase(s) || temp[1].equalsIgnoreCase(s))
+					matches++;
 			}
 		}
 		if(matches == filterwords.size())

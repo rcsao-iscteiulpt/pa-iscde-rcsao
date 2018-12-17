@@ -30,13 +30,14 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.osgi.framework.ServiceReference;
 
 import InfoClasses.ConstructorInfo;
 import InfoClasses.FieldInfo;
 import InfoClasses.MethodInfo;
 import InfoClasses.Modifiers;
 import pa.iscde.docGeneration.ext.EvaluateContributionsHandler;
-
+import pa.iscde.search.services.SearchService;
 import pt.iscte.pidesco.extensibility.PidescoView;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 
@@ -55,6 +56,10 @@ public class DocGenView implements PidescoView {
 
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
 		instance = this;
+		
+		ServiceReference<SearchService> refSearch = Activator.getInstance().getContext().getServiceReference(SearchService.class);
+		SearchService searchService = (SearchService) Activator.getInstance().getContext().getService(refSearch);
+		searchService.addListener(new SearchListenersActions());
 		
 		new EvaluateContributionsHandler();
 		this.editorservice = Activator.getInstance().getEditorservice();
@@ -143,9 +148,12 @@ public class DocGenView implements PidescoView {
 	}
 	
 
-	void setSearchword(String searchWord) {
-		this.searchword = searchWord;
-		addFilter(searchWord);
+	public void SearchWord(String searchWord) {
+		if(searchword != "") {
+			removeFilter(this.searchword);
+			this.searchword = searchWord;
+			addFilter(searchWord);
+		}
 	}
 
 	public void addButtonCheckListeners() {
@@ -312,15 +320,9 @@ public class DocGenView implements PidescoView {
 			tc2.setWidth(250);
 			tc3.setWidth(250);
 
-			for (MethodInfo m : c.getClassmethods()) {
-				
+			for (MethodInfo m : c.getClassmethods()) {	
 				if (!filter || dfilter.accept(m)) {
-					System.out.println(m.getModifiers());
-					System.out.println(dfilter.accept(m));
 					TableItem newitem = new TableItem(methods, SWT.NONE);
-					Color blue = new Color(folders.getDisplay(), 255, 255, 229);
-					newitem.setBackground(blue);
-			
 					newitem.setText(m.getMethodInfo());
 				}
 			}

@@ -14,9 +14,11 @@ import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
 public class Activator implements BundleActivator {
 
+	private BundleContext context;
 	private static Activator instance;
 	private JavaEditorServices editorservice;
 	private TasksServices taskservice;
+	
 
 	
 	public static Activator getInstance() {
@@ -25,11 +27,14 @@ public class Activator implements BundleActivator {
 
 	public void start(BundleContext context) throws Exception {
 		instance = this;
+		this.context = context;
 
 		DocGenServices services = new ServicesImpl();
 		context.registerService(DocGenServices.class, services, null);
 
 		ServiceReference<ProjectBrowserServices> refBrowser = context.getServiceReference(ProjectBrowserServices.class);
+		
+		
 
 		ServiceReference<JavaEditorServices> refJavaEditor = context.getServiceReference(JavaEditorServices.class);
 		
@@ -42,9 +47,6 @@ public class Activator implements BundleActivator {
 
 		ProjectBrowserServices browserService = (ProjectBrowserServices) context.getService(refBrowser);
 		browserService.addListener(new BrowserListenersAction(services));
-		
-		SearchService searchService = (SearchService) context.getService(refBrowser);
-	//	searchService.addListener(new SearchListenersActions(searchService));
 		
 		
 		
@@ -68,6 +70,11 @@ public class Activator implements BundleActivator {
 		context = null;
 		instance = null;
 	}
+
+	public BundleContext getContext() {
+		return context;
+	}
+
 
 
 }

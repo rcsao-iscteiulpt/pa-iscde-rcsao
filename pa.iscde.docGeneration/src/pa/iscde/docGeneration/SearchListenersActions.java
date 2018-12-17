@@ -9,7 +9,8 @@ public class SearchListenersActions implements SearchListener {
 
 	@Override
 	public void searchComplete(String searchInput, List<MatchResult> resultList) {
-		DocGenView.getInstance().setSearchword(searchInput);
+		
+		DocGenView.getInstance().SearchWord(searchInput);
 	}
 
 }
