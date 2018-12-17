@@ -29,12 +29,9 @@ public class Activator implements BundleActivator {
 		context.registerService(DocGenServices.class, services, null);
 
 		ServiceReference<ProjectBrowserServices> refBrowser = context.getServiceReference(ProjectBrowserServices.class);
-		
-		ServiceReference<TasksServices> refTasks = context.getServiceReference(TasksServices.class);
 
 		ServiceReference<JavaEditorServices> refJavaEditor = context.getServiceReference(JavaEditorServices.class);
 		
-		taskservice = context.getService(refTasks);
 		
 		
 
