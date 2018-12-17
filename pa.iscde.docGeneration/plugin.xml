@@ -10,4 +10,10 @@
             class="pa.iscde.docGeneration.DocGenView">
       </view>
    </extension>
+   <extension
+         point="pa.iscde.javaTasks.ext">
+      <client
+            TasksAction="pa.iscde.docGeneration.ext.ExtensionJavaTasks">
+      </client>
+   </extension>
 </plugin>

@@ -19,45 +19,57 @@ public class DocFilter implements Filter {
 
 	@Override
 	public boolean accept(ConstructorInfo c) {
+		int matches = 0;
 		for (String s : filterwords) {
 			for (Modifiers mod : c.getModifiers()) {
 				if (mod.toString().equalsIgnoreCase(s))
-					return true;
+					matches++;
 			}	
 			if(c.getName().equalsIgnoreCase(s)) {
-				return true;			
+				matches++;			
 			}
 		}
-		return false;
+		
+		if(matches == filterwords.size())
+			return true;
+		else
+			return false;
 	}
 
 	@Override
 	public boolean accept(MethodInfo c) {
-		
+		int matches = 0;
 		for (String s : filterwords) {
 			for (Modifiers mod : c.getModifiers()) {
 				if (mod.toString().equalsIgnoreCase(s))
-					return true;
+					matches++;	
 			}	
 			if(c.getReturntype().equalsIgnoreCase(s) || c.getName().equalsIgnoreCase(s)) {
-				return true;			
+				matches++;				
 			}
 		}
-		return false;
+		if(matches == filterwords.size())
+			return true;
+		else
+			return false;
 	}
 
 	@Override
 	public boolean accept(FieldInfo c) {
+		int matches = 0;
 		for (String s : filterwords) {	
 			for (Modifiers mod : c.getModifiers()) {
 				if (mod.toString().equalsIgnoreCase(s))
-					return true;
+					matches++;	
 			}	
 			if(c.getType().equalsIgnoreCase(s) || c.getName().equalsIgnoreCase(s)) {
-				return true;			
+				matches++;		
 			}
 		}
-		return false;
+		if(matches == filterwords.size())
+			return true;
+		else
+			return false;
 	}
 	
 	

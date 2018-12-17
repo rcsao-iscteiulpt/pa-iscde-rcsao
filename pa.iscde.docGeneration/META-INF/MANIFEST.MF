@@ -17,4 +17,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: pa.iscde.pidesco.docGeneration
 Bundle-ActivationPolicy: lazy
 Export-Package: pa.iscde.docGeneration.ext
-Import-Package: pa.iscde.javaTasks.ext
+Import-Package: pa.iscde.javaTasks.ext,
+ pa.iscde.search.model,
+ pa.iscde.search.services

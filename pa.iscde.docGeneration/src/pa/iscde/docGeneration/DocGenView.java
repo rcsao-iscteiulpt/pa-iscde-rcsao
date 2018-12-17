@@ -14,13 +14,12 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -31,7 +30,6 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
 
 import InfoClasses.ConstructorInfo;
 import InfoClasses.FieldInfo;
@@ -50,14 +48,14 @@ public class DocGenView implements PidescoView {
 	private CTabFolder folders;
 	private JavaEditorServices editorservice;
 	private Set<String> activefilters = new HashSet<String>();
-	private ArrayList<Button> checks = new ArrayList<Button>();
+	private ArrayList<Button> filterchecks = new ArrayList<Button>();
+	private String searchword;
 
-	public DocGenView() {
-		instance = this;
 
-	}
 
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
+		instance = this;
+		
 		new EvaluateContributionsHandler();
 		this.editorservice = Activator.getInstance().getEditorservice();
 		viewArea.setLayout(new GridLayout(1, false));
@@ -66,7 +64,7 @@ public class DocGenView implements PidescoView {
 		// Filter Checks
 		Composite filterscomp = new Composite(viewArea, SWT.BORDER);
 		GridData gridData = new GridData();
-		filterscomp.setLayout(new GridLayout(8, false));
+		filterscomp.setLayout(new GridLayout(10, false));
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = false;
 		gridData.verticalAlignment = SWT.TOP;
@@ -84,8 +82,20 @@ public class DocGenView implements PidescoView {
 		for(Modifiers s: Modifiers.values()) {
 			Button button = new Button(filterscomp, SWT.CHECK);
 			button.setText(s.toString());
-			checks.add(button);
+			filterchecks.add(button);
 		}
+		
+		Button cancelsearch = new Button(filterscomp, SWT.PUSH | SWT.RIGHT);
+		cancelsearch.setText("Cancel Search ");
+		
+		cancelsearch.addListener(SWT.Selection, new Listener() {
+		      public void handleEvent(Event e) {
+		          removeFilter(searchword);
+		        }
+		      });
+		
+		
+		
 		
 		addButtonCheckListeners();
 
@@ -131,9 +141,15 @@ public class DocGenView implements PidescoView {
 			item.drawTables(item.c);
 		}
 	}
+	
+
+	void setSearchword(String searchWord) {
+		this.searchword = searchWord;
+		addFilter(searchWord);
+	}
 
 	public void addButtonCheckListeners() {
-		for (Button button : checks) {
+		for (Button button : filterchecks) {
 			button.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -152,7 +168,7 @@ public class DocGenView implements PidescoView {
 		activefilters.add(g);
 		refresh();
 	}
-
+	
 	public void removeFilter(String g) {
 		for (String s : activefilters) {
 			if (s.equals(g)) {
@@ -163,13 +179,6 @@ public class DocGenView implements PidescoView {
 		refresh();
 	}
 
-	public static DocGenView getInstance() {
-		return instance;
-	}
-
-	public File getSelectedFile() {
-		return openedfiles.get(folders.getSelection());
-	}
 
 	private class MyCTabItem extends CTabItem {
 
@@ -273,6 +282,7 @@ public class DocGenView implements PidescoView {
 
 			for (ConstructorInfo m : c.getClassconstructors()) {
 				if (!filter || dfilter.accept(m)) {
+					
 					TableItem newitem = new TableItem(constructors, SWT.NONE);
 					newitem.setText(m.getConstructorInfo());
 				}
@@ -303,8 +313,14 @@ public class DocGenView implements PidescoView {
 			tc3.setWidth(250);
 
 			for (MethodInfo m : c.getClassmethods()) {
+				
 				if (!filter || dfilter.accept(m)) {
+					System.out.println(m.getModifiers());
+					System.out.println(dfilter.accept(m));
 					TableItem newitem = new TableItem(methods, SWT.NONE);
+					Color blue = new Color(folders.getDisplay(), 255, 255, 229);
+					newitem.setBackground(blue);
+			
 					newitem.setText(m.getMethodInfo());
 				}
 			}
@@ -331,6 +347,14 @@ public class DocGenView implements PidescoView {
 			t.addListener(SWT.DefaultSelection, l);
 		}
 
+	}
+	
+	public static DocGenView getInstance() {
+		return instance;
+	}
+	
+	public File getSelectedFile() {
+		return openedfiles.get(folders.getSelection());
 	}
 
 }

@@ -8,6 +8,7 @@ import org.osgi.framework.ServiceReference;
 
 import pa.iscde.docGeneration.ext.DocGenServices;
 import pa.iscde.javaTasks.ext.TasksServices;
+import pa.iscde.search.services.SearchService;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
@@ -39,8 +40,11 @@ public class Activator implements BundleActivator {
 
 		editorservice.addListener(new EditorListenersActions(editorservice));
 
-		ProjectBrowserServices browserservice = (ProjectBrowserServices) context.getService(refBrowser);
-		browserservice.addListener(new BrowserListenersAction(services));
+		ProjectBrowserServices browserService = (ProjectBrowserServices) context.getService(refBrowser);
+		browserService.addListener(new BrowserListenersAction(services));
+		
+		SearchService searchService = (SearchService) context.getService(refBrowser);
+	//	searchService.addListener(new SearchListenersActions(searchService));
 		
 		
 		
