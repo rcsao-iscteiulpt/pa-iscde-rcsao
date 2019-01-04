@@ -13,6 +13,7 @@
    <extension
          point="pa.iscde.javaTasks.ext">
       <client
+            TagName="pa.iscde.docGeneration.ext.ExtensionJavaTasks"
             TasksAction="pa.iscde.docGeneration.ext.ExtensionJavaTasks">
       </client>
    </extension>

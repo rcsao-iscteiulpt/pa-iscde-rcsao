@@ -56,6 +56,16 @@
                </documentation>
             </annotation>
          </attribute>
+         <attribute name="DocGenExtensions" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":pa.iscde.docGeneration.ext.DocGenExtensions"/>
+               </appinfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

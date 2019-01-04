@@ -1,10 +1,15 @@
-package pa.iscde.docGeneration.ext;
+package pa.iscde.docGeneration;
 
+import java.util.ArrayList;
+
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 
-import pa.iscde.docGeneration.DocGenView;
+import pa.iscde.docGeneration.ext.DocGenExtensions;
+import pa.iscde.javaTasks.ext.Task;
+import pa.iscde.javaTasks.ext.TasksAction;
 
 public class EvaluateContributionsHandler {
 
@@ -17,19 +22,15 @@ public class EvaluateContributionsHandler {
 			DocGenView.getInstance().addFilter(e.getAttribute("StringName"));
 		}
 	}
-
-//    
-//    private void executeExtension(final Object o) {
-//        ISafeRunnable runnable = new ISafeRunnable() {
-//            @Override
-//            public void handleException(Throwable e) {
-//                System.out.println("Exception in client");
-//            }
-//
-////            @Override
-//            public void run() throws Exception {
-////                ((IGreeter) o).greet();
-//            }
-//        };
-//        SafeRunner.run(runnable);
+	
+	
+	public void doubleClick(ArrayList<String> info) {
+		for (IConfigurationElement e : config) {
+			if (e instanceof DocGenExtensions) {
+				((DocGenExtensions) e).doubleClick(info);
+			}
+		}
+	}
 }
+
+

@@ -19,8 +19,18 @@ public interface DocGenServices {
 	 */
 	File getSelectedFile();
 	
+	/**
+	 * Filters documentation tables according to given String
+	 * @param String filterWord (non-null)
+	 */
+	void filterWord(String filterWord);
 	
-	void filterModifier(String filterword);
+	/**
+	 * Erases all apllied filters on the Documention View
+	 */
+	void cleanFilters();
+	
+	
 
 
 }

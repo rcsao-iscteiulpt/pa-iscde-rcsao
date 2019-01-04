@@ -21,14 +21,21 @@ public class ServicesImpl implements DocGenServices {
 	@Override
 	public File getSelectedFile() {
 		return DocGenView.getInstance().getSelectedFile();
-		// TODO Auto-generated method stub
+	}
+
+
+
+	@Override
+	public void filterWord(String filterWord) {
+		Assert.isNotNull(filterWord, "String cannot be null");
+		DocGenView.getInstance().addFilter(filterWord);
 		
 	}
 
 
 
 	@Override
-	public void filterModifier(String filterword) {
+	public void cleanFilters() {
 		// TODO Auto-generated method stub
 		
 	}

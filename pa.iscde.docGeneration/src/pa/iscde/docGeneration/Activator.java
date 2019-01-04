@@ -16,8 +16,8 @@ public class Activator implements BundleActivator {
 
 	private BundleContext context;
 	private static Activator instance;
-	private JavaEditorServices editorservice;
-	private TasksServices taskservice;
+	private JavaEditorServices editorService;
+	private TasksServices taskService;
 	
 
 	
@@ -33,37 +33,34 @@ public class Activator implements BundleActivator {
 		context.registerService(DocGenServices.class, services, null);
 
 		ServiceReference<ProjectBrowserServices> refBrowser = context.getServiceReference(ProjectBrowserServices.class);
-		
-		
-
 		ServiceReference<JavaEditorServices> refJavaEditor = context.getServiceReference(JavaEditorServices.class);
+		ServiceReference<TasksServices> refTasks = context.getServiceReference(TasksServices.class);
 		
 		
 		
-
-		editorservice = (JavaEditorServices) context.getService(refJavaEditor);
-
-		editorservice.addListener(new EditorListenersActions(editorservice));
+		editorService = (JavaEditorServices) context.getService(refJavaEditor);
+		
+		editorService.addListener(new EditorListenersActions(editorService));
 
 		ProjectBrowserServices browserService = (ProjectBrowserServices) context.getService(refBrowser);
 		browserService.addListener(new BrowserListenersAction(services));
 		
-		
+		taskService = (TasksServices) context.getService(refTasks);
 		
 
 	}
 
 
 	public TasksServices getTaskservice() {
-		return taskservice;
+		return taskService;
 	}
 
 	/**
 	 * Getter for the JavaEditor's Services
-	 * @return
+	 * @return JavaEditor's Services instance
 	 */
 	public JavaEditorServices getEditorservice() {
-		return editorservice;
+		return editorService;
 	}
 
 	public void stop(BundleContext context) throws Exception {
