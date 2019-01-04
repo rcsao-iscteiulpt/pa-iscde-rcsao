@@ -34,7 +34,7 @@ public class Activator implements BundleActivator {
 
 		ServiceReference<ProjectBrowserServices> refBrowser = context.getServiceReference(ProjectBrowserServices.class);
 		ServiceReference<JavaEditorServices> refJavaEditor = context.getServiceReference(JavaEditorServices.class);
-		ServiceReference<TasksServices> refTasks = context.getServiceReference(TasksServices.class);
+		//ServiceReference<TasksServices> refTasks = context.getServiceReference(TasksServices.class);
 		
 		
 		
@@ -45,7 +45,7 @@ public class Activator implements BundleActivator {
 		ProjectBrowserServices browserService = (ProjectBrowserServices) context.getService(refBrowser);
 		browserService.addListener(new BrowserListenersAction(services));
 		
-		taskService = (TasksServices) context.getService(refTasks);
+		//taskService = (TasksServices) context.getService(refTasks);
 		
 
 	}

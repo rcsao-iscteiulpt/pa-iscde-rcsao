@@ -14,6 +14,7 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
@@ -48,7 +49,7 @@ public class DocGenView implements PidescoView {
 	private EvaluateContributionsHandler extensions = new EvaluateContributionsHandler();
 	private JavaEditorServices editorservice;
 	private Set<String> activefilters = new HashSet<String>();
-	private ArrayList<Button> filterchecks = new ArrayList<Button>();
+//	private ArrayList<Button> filterchecks = new ArrayList<Button>();
 	private String searchword;
 
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
@@ -59,7 +60,6 @@ public class DocGenView implements PidescoView {
 		SearchService searchService = (SearchService) Activator.getInstance().getContext().getService(refSearch);
 		searchService.addListener(new SearchListenersActions());
 
-		
 		this.editorservice = Activator.getInstance().getEditorservice();
 		viewArea.setLayout(new GridLayout(1, false));
 		viewArea.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -82,6 +82,8 @@ public class DocGenView implements PidescoView {
 		filterfD[0].setHeight(13);
 		labelfilters.setFont(new Font(viewArea.getDisplay(), filterfD[0]));
 
+		ArrayList<Button> filterchecks = new ArrayList<Button>();
+		
 		for (Modifiers s : Modifiers.values()) {
 			Button button = new Button(filterscomp, SWT.CHECK);
 			button.setText(s.toString());
@@ -110,7 +112,7 @@ public class DocGenView implements PidescoView {
 			}
 		});
 
-		addButtonCheckListeners();
+		addButtonCheckListeners(filterchecks);
 
 		folders = new CTabFolder(viewArea, SWT.BORDER | SWT.V_SCROLL);
 		folders.setLayout(new GridLayout());
@@ -138,9 +140,8 @@ public class DocGenView implements PidescoView {
 		folders.setSelection(newtab);
 
 		openedfiles.put(newtab, file);
-		
-		
-		//System.out.println(Activator.getInstance().getTaskservice().getTasks());
+
+		// System.out.println(Activator.getInstance().getTaskservice().getTasks());
 
 	}
 
@@ -165,7 +166,7 @@ public class DocGenView implements PidescoView {
 		}
 	}
 
-	public void addButtonCheckListeners() {
+	public void addButtonCheckListeners(ArrayList<Button> filterchecks) {
 		for (Button button : filterchecks) {
 			button.addSelectionListener(new SelectionAdapter() {
 				@Override
@@ -179,7 +180,24 @@ public class DocGenView implements PidescoView {
 				}
 			});
 		}
-	}
+
+//		for (Button button : filterchecks) {
+//			button.addDisposeListener(new DisposeListener() {
+//				@Override
+//				public void widgetDisposed(DisposeEvent e) {
+//					for(Listener l : button.getListeners(SWT.Selection)) {
+//						button.removeSelectionListener((SelectionListener) l);
+//						
+//					}
+//					button.removeDisposeListener(this);
+//					
+//				}
+//			});
+//			
+
+		}
+
+	
 
 	public void addFilter(String g) {
 		activefilters.add(g);
@@ -347,13 +365,13 @@ public class DocGenView implements PidescoView {
 			Listener l = new Listener() {
 				public void handleEvent(Event e) {
 					TableItem[] selection = t.getSelection();
-					
+
 					ArrayList<String> info = new ArrayList<String>();
-					for(int i = 0; i < selection.length; i++) {
+					for (int i = 0; i < selection.length; i++) {
 						info.add(selection[i].toString());
 					}
 					extensions.doubleClick(info);
-					
+
 					String word = selection[0].toString().replaceAll("(.*)[\\{]|[\\}](.*)", "");
 					FileScanner scanner = new FileScanner();
 					File selectedfile = openedfiles.get(folders.getSelection());
