@@ -22,7 +22,6 @@ public class Activator implements BundleActivator {
 		this.context = context;
 		
 		ServiceReference<DocGenServices> refDoc = context.getServiceReference(DocGenServices.class);
-		
 		docServices = (DocGenServices) context.getService(refDoc);
 		
 	}
