@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="id1"
+         name="Test View"
+         point="pt.iscte.pidesco.view">
+      <view
+            class="pa.iscde.docgeneration.test.TestView">
+      </view>
+   </extension>
+   <extension
+         point="pa.iscde.docGeneration.ext">
+      <client
+            DocGenExtensions="pa.iscde.docgeneration.test.TestActions"></client>
+   </extension>
+
+</plugin>
