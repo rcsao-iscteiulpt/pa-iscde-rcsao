@@ -5,7 +5,11 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import pa.iscde.docGeneration.ext.DocGenServices;
 
-
+/** 
+ * Activator for the Testing Component
+ * @author Ricardo Silva
+ *
+ */
 public class Activator implements BundleActivator {
 
 	private BundleContext context;

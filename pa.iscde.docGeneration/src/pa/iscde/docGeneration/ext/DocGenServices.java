@@ -1,9 +1,14 @@
 package pa.iscde.docGeneration.ext;
 
 import java.io.File;
+import java.util.Set;
 
 
-
+/**
+ * Class specifying all services that Documentation Generation component presents
+ * @author Ricardo Silva
+ *
+ */
 public interface DocGenServices {
 
 	/**
@@ -26,9 +31,10 @@ public interface DocGenServices {
 	void filterWord(String filterWord);
 	
 	/**
-	 * Erases all apllied filters on the Documention View
+	 * Gets all apllied filters on the Documentation view
+	 * @return a string list which contains every filter
 	 */
-	void cleanAllFilters();
+	Set<String> getAllFilters();
 	
 	
 

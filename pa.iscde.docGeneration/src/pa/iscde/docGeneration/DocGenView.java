@@ -38,9 +38,12 @@ import InfoClasses.Modifiers;
 import pa.iscde.search.services.SearchService;
 import pt.iscte.pidesco.extensibility.PidescoView;
 
+/**
+ * View of the Documentation Generation Component
+ * @author Ricardo Silva
+ *
+ */
 public class DocGenView implements PidescoView {
-
-	
 
 	private static DocGenView instance;
 
@@ -48,25 +51,22 @@ public class DocGenView implements PidescoView {
 	private CTabFolder folders;
 	private EvaluateContributionsHandler extensions = new EvaluateContributionsHandler();
 	private Set<String> activefilters = new HashSet<String>();
-	private ArrayList<Button> filterchecks = new ArrayList<Button>();	
+	private ArrayList<Button> filterchecks = new ArrayList<Button>();
 	private String searchword;
 
-	public void createContents(Composite viewArea, Map<String, Image> imageMap) {	
+	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
 		instance = this;
-		
-		//Component Icon Label
+
+		// Component Icon Label
 		Label label = new Label(viewArea, SWT.NONE);
 		label.setImage(imageMap.get("icon.png"));
-		
-		
-		//Getting Search Component reference
+
+		// Getting Search Component reference
 		ServiceReference<SearchService> refSearch = Activator.getInstance().getContext()
 				.getServiceReference(SearchService.class);
 		SearchService searchService = (SearchService) Activator.getInstance().getContext().getService(refSearch);
 		searchService.addListener(new SearchListenersActions());
 
-	
-		
 		viewArea.setLayout(new GridLayout(1, false));
 		viewArea.setLayoutData(new GridData(GridData.FILL_BOTH));
 
@@ -81,7 +81,7 @@ public class DocGenView implements PidescoView {
 
 		filterscomp.setLayoutData(gridData);
 
-		//Filter Label
+		// Filter Label
 		Label labelfilters = new Label(filterscomp, SWT.FILL | SWT.BOLD);
 		labelfilters.setText("Filters: ");
 		FontData[] filterfD = labelfilters.getFont().getFontData();
@@ -95,16 +95,14 @@ public class DocGenView implements PidescoView {
 			filterchecks.add(button);
 		}
 
-		
-		//Creating Buttons
+		// Creating Buttons
 		Button cancelSearch = new Button(filterscomp, SWT.PUSH | SWT.RIGHT);
 		cancelSearch.setText("Cancel SearchFilter  ");
 
 		Button resetFilters = new Button(filterscomp, SWT.PUSH | SWT.RIGHT);
 		resetFilters.setText("Reset All Filters ");
 
-		
-		//Adding Button Listeners
+		// Adding Button Listeners
 		resetFilters.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
 				ClearAllfilters();
@@ -120,6 +118,7 @@ public class DocGenView implements PidescoView {
 
 		addButtonCheckListeners(filterchecks);
 
+		// CtabFolfers creation
 		folders = new CTabFolder(viewArea, SWT.BORDER | SWT.V_SCROLL);
 		folders.setLayout(new GridLayout());
 		gridData = new GridData();
@@ -130,6 +129,15 @@ public class DocGenView implements PidescoView {
 		folders.setLayoutData(gridData);
 	}
 
+	/**
+	 * Method called for opening a new tab, it receives a file and read it's class
+	 * information though ASTVisitor<br>
+	 * Also checks if it's already opened, if it is then its return<br>
+	 * If it's not then it proceeds to open a new tab displaying the class
+	 * information of the file
+	 * 
+	 * @param file
+	 */
 	public void openfile(File file) {
 		ClassInfoChecker c = new ClassInfoChecker();
 		Activator.getInstance().getEditorservice().parseFile(file, c);
@@ -151,6 +159,13 @@ public class DocGenView implements PidescoView {
 
 	}
 
+	/**
+	 * Method used for updating a specific file, usually called whenever a save
+	 * occurs
+	 * 
+	 * @param c info of the updated file
+	 * @param f file that was saved in the JavaEditor
+	 */
 	public void updateFile(ClassInfoChecker c, File f) {
 		for (MyCTabItem item : openedfiles.keySet()) {
 			if (openedfiles.get(item).getName().equals(f.getName()))
@@ -158,12 +173,22 @@ public class DocGenView implements PidescoView {
 		}
 	}
 
+	/**
+	 * Method that updates all opened tabs in the Documentation View
+	 */
 	public void refresh() {
 		for (MyCTabItem item : openedfiles.keySet()) {
 			item.drawTables(item.c);
 		}
 	}
 
+	/**
+	 * Used specifically in the interaction with the Search Component Similar to
+	 * addFilter(), this method also adds a new filter but it removes the old
+	 * searchWord value from the list and adds the new one
+	 * 
+	 * @param searchWord string new searchvalue to replaced the old value
+	 */
 	public void SearchWord(String searchWord) {
 		if (!searchWord.trim().equals("")) {
 			removeFilter(this.searchword);
@@ -187,29 +212,21 @@ public class DocGenView implements PidescoView {
 			});
 		}
 
-//		for (Button button : filterchecks) {
-//			button.addDisposeListener(new DisposeListener() {
-//				@Override
-//				public void widgetDisposed(DisposeEvent e) {
-//					for(Listener l : button.getListeners(SWT.Selection)) {
-//						button.removeSelectionListener((SelectionListener) l);
-//						
-//					}
-//					button.removeDisposeListener(this);
-//					
-//				}
-//			});
-//			
+	}
 
-		}
-
-	
-
+	/**
+	 * Adds a new filter and refreshes the tables
+	 * @param g String new word to be added to the filter
+	 */
 	public void addFilter(String g) {
 		activefilters.add(g);
 		refresh();
 	}
 
+	/**
+	 * removes a filter and refreshes the tables
+	 * @param g String word to be removed of the filter
+	 */
 	public void removeFilter(String g) {
 		for (String s : activefilters) {
 			if (s.equals(g)) {
@@ -219,7 +236,7 @@ public class DocGenView implements PidescoView {
 		}
 		refresh();
 	}
-	
+
 	public void ClearAllfilters() {
 		activefilters.clear();
 		for (Button b : filterchecks)
@@ -227,6 +244,11 @@ public class DocGenView implements PidescoView {
 		refresh();
 	}
 
+	/**
+	 * Class used for storing additional information about the tables and the tab(class) name
+	 * @author Ricardo Silva
+	 *
+	 */
 	private class MyCTabItem extends CTabItem {
 
 		private String name;
@@ -240,7 +262,6 @@ public class DocGenView implements PidescoView {
 			this.name = c.getClassbasicinfo().get("ClassName").toString();
 			this.c = c;
 
-			
 			this.addDisposeListener(new DisposeListener() {
 
 				@Override
@@ -291,7 +312,7 @@ public class DocGenView implements PidescoView {
 			fields.setLinesVisible(true);
 			fields.setHeaderVisible(true);
 
-			addClickListener(fields, 'F');
+			
 
 			TableColumn fieldtc1 = new TableColumn(fields, SWT.CENTER | SWT.BORDER);
 			TableColumn fieldtc2 = new TableColumn(fields, SWT.CENTER | SWT.BORDER);
@@ -301,6 +322,8 @@ public class DocGenView implements PidescoView {
 			fieldtc1.setWidth(250);
 			fieldtc2.setWidth(250);
 
+			
+			//Filter Fields
 			for (FieldInfo f : c.getClassfields()) {
 				if (!filter || dfilter.accept(f)) {
 					TableItem newitem = new TableItem(fields, SWT.NONE);
@@ -328,6 +351,7 @@ public class DocGenView implements PidescoView {
 			constructortc1.setWidth(250);
 			constructortc2.setWidth(250);
 
+			//Filter Constructors
 			for (ConstructorInfo m : c.getClassconstructors()) {
 				if (!filter || dfilter.accept(m)) {
 
@@ -336,7 +360,7 @@ public class DocGenView implements PidescoView {
 				}
 			}
 
-			addClickListener(constructors, 'C');
+			
 
 			// Methods Label
 			Label methodslabel = new Label(group, SWT.FILL);
@@ -360,6 +384,7 @@ public class DocGenView implements PidescoView {
 			tc2.setWidth(250);
 			tc3.setWidth(250);
 
+			//Filter Methods
 			for (MethodInfo m : c.getClassmethods()) {
 				if (!filter || dfilter.accept(m)) {
 					TableItem newitem = new TableItem(methods, SWT.NONE);
@@ -367,25 +392,33 @@ public class DocGenView implements PidescoView {
 				}
 			}
 
+			//Add Listeners
+			addClickListener(fields, 'F');
+			addClickListener(constructors, 'C');
 			addClickListener(methods, 'M');
 
 			this.setControl(group);
 
+			//Set tab name
 			this.setText(name);
 
 		}
 
+		/**
+		 * Method for adding a DoubleClick Listener to tables 
+		 * @param t Table in which the listener will be added
+		 * @param type char type of table clicked, e.g ('C' = Constructor, 'M' = Method, 'F' = Field)
+		 */
 		private void addClickListener(Table t, char type) {
 			Listener l = new Listener() {
 				public void handleEvent(Event e) {
 					TableItem[] selection = t.getSelection();
 					ArrayList<String> info = new ArrayList<String>();
-					
-					for(int i = 0; !selection[0].getText(i).equals(""); i++) {
+
+					for (int i = 0; !selection[0].getText(i).equals(""); i++) {
 						info.add(selection[0].getText(i));
-					}	
-			
-					
+					}
+
 					extensions.doubleClick(info, type);
 
 					String word = selection[0].toString().replaceAll("(.*)[\\{]|[\\}](.*)", "");
@@ -406,6 +439,10 @@ public class DocGenView implements PidescoView {
 
 	public File getSelectedFile() {
 		return openedfiles.get(folders.getSelection());
+	}
+
+	public Set<String> getActivefilters() {
+		return activefilters;
 	}
 
 }

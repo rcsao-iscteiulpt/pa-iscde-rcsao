@@ -9,6 +9,9 @@ import pa.iscde.javaTasks.ext.TasksAction;
 
 public class ExtensionJavaTasks implements TasksAction {
 	
+	/**
+	 * Action performed whenever a doubleclick happens on the JavaTasks View
+	 */
 	public void doubleClick(Task t) {
 		DocGenView.getInstance().openfile(
 				new File(t.getPath() + "/" + t.getResource()));						

@@ -16,7 +16,13 @@ import InfoClasses.FieldInfo;
 import InfoClasses.MethodInfo;
 import InfoClasses.Modifiers;
 
-
+/**
+ * Class that extends ASTVisitor to get information about a given class <br>
+ * It stores information about it's methods, fields and constructors in Lists <br>
+ * Like names, parameters, ReturnType, Modifiers, etc...
+ * @author Ricardo Silva
+ *
+ */
 public class ClassInfoChecker extends ASTVisitor {
 
 	private final HashMap<String, Object> classbasicinfo = new HashMap<String, Object>();
@@ -24,7 +30,10 @@ public class ClassInfoChecker extends ASTVisitor {
 	private final ArrayList<ConstructorInfo> classconstructors = new ArrayList<ConstructorInfo>();
 	private final ArrayList<MethodInfo> classmethods = new ArrayList<MethodInfo>();
 
-	// visits class/interface declaration
+	/**
+	 * Method used for visiting the class itself and stores it's info on the HashMap
+	 * @param TypeDeclaration node, node containing info about the class itself 
+	 */
 	@Override
 	public boolean visit(TypeDeclaration node) {
 		classbasicinfo.put("Modifiers", getModifiersList(node.getModifiers()));
@@ -32,7 +41,10 @@ public class ClassInfoChecker extends ASTVisitor {
 		return true;
 	}
 
-	
+	/**
+	 * Method used to visit class methods/constructors and stores info on the method/constructor list 
+	 * @param MethodDeclaration node, node containing info about the visited class method 
+	 */
 	@Override
 	public boolean visit(MethodDeclaration node) {
 		if(node.isConstructor()) {
@@ -43,7 +55,10 @@ public class ClassInfoChecker extends ASTVisitor {
 		return true; // false to avoid child VariableDeclarationFragment to be processed again
 	}
 
-	// visits attributes
+	/**
+	 * Method used to visit class fields and stores it's info on the field list
+	 * @param MethodDeclaration node, node containing info about the visited class method 
+	 */
 	@Override
 	public boolean visit(FieldDeclaration node) {
 		classfields.add(new FieldInfo(node, getModifiersList(node.getModifiers())));
@@ -59,6 +74,11 @@ public class ClassInfoChecker extends ASTVisitor {
 	}
 	*/
 
+	/**
+	 * Getter which will get all modifiers according the given integer
+	 * @param modifiers int which display modifiers explicity
+	 * @return list of enums corresponding to the given object modifiers
+	 */
 	public ArrayList<Modifiers> getModifiersList(int modifiers) {
 		ArrayList<Modifiers> modifierslist = new ArrayList<Modifiers>();
 

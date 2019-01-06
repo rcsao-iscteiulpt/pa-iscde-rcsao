@@ -9,6 +9,11 @@ import InfoClasses.MethodInfo;
 import InfoClasses.Modifiers;
 import pa.iscde.docGeneration.ext.Filter;
 
+/**
+ * Class implementing the Filter interface
+ * @author Ricardo Silva
+ *
+ */
 public class DocFilter implements Filter {
 
 	private Set<String> filterwords = new HashSet<String>();;
@@ -17,6 +22,8 @@ public class DocFilter implements Filter {
 		this.filterwords = set;
 	}
 
+	
+	
 	@Override
 	public boolean accept(ConstructorInfo c) {
 		int matches = 0;
@@ -42,6 +49,8 @@ public class DocFilter implements Filter {
 			return false;
 	}
 
+	
+	
 	@Override
 	public boolean accept(MethodInfo c) {
 		int matches = 0;
@@ -66,6 +75,8 @@ public class DocFilter implements Filter {
 			return false;
 	}
 
+	
+	
 	@Override
 	public boolean accept(FieldInfo c) {
 		int matches = 0;

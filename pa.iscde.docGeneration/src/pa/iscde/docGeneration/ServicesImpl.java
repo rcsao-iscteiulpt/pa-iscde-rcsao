@@ -1,6 +1,7 @@
 package pa.iscde.docGeneration;
 
 import java.io.File;
+import java.util.Set;
 
 import org.eclipse.core.runtime.Assert;
 import pa.iscde.docGeneration.ext.DocGenServices;
@@ -35,8 +36,8 @@ public class ServicesImpl implements DocGenServices {
 
 
 	@Override
-	public void cleanAllFilters() {
-		DocGenView.getInstance().ClearAllfilters();	
-	}
+	public Set<String> getAllFilters() {
+		return DocGenView.getInstance().getActivefilters();
+	}	
 
 }	

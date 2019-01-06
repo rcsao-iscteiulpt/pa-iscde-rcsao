@@ -8,22 +8,21 @@ import org.osgi.framework.ServiceReference;
 
 import pa.iscde.docGeneration.ext.DocGenServices;
 import pa.iscde.javaTasks.ext.TasksServices;
-import pa.iscde.search.services.SearchService;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
+/**
+ * Activator for the Documentation Generation Component
+ * @author Ricardo Silva
+ *
+ */
 public class Activator implements BundleActivator {
 
 	private BundleContext context;
 	private static Activator instance;
 	private JavaEditorServices editorService;
-	private TasksServices taskService;
-	
-
-	
-	public static Activator getInstance() {
-		return instance;
-	}
+	//private TasksServices taskService;
+		
 
 	public void start(BundleContext context) throws Exception {
 		instance = this;
@@ -51,9 +50,9 @@ public class Activator implements BundleActivator {
 	}
 
 
-	public TasksServices getTaskservice() {
-		return taskService;
-	}
+//	public TasksServices getTaskservice() {
+//		return taskService;
+//	}
 
 	/**
 	 * Getter for the JavaEditor's Services
@@ -67,7 +66,19 @@ public class Activator implements BundleActivator {
 		context = null;
 		instance = null;
 	}
+	
+	/**
+	 * Getter for the Activator instance
+	 * @return Activator instance;
+	 */
+	public static Activator getInstance() {
+		return instance;
+	}
 
+	/**
+	 * Getter for the Activator's context
+	 * @return Activator's context
+	 */
 	public BundleContext getContext() {
 		return context;
 	}

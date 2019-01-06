@@ -1,6 +1,5 @@
 package pa.iscde.docgeneration.test;
 
-import java.io.File;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
@@ -45,8 +44,8 @@ public class TestView implements PidescoView {
 		gridData.horizontalAlignment = GridData.FILL;
 		
 		//Button Creation
-		Button cleanFilters = new Button(servicescomp, SWT.PUSH);
-		cleanFilters.setText("Clean filters ");
+		Button getFilters = new Button(servicescomp, SWT.PUSH);
+		getFilters.setText("get Filters ");
 		
 		Button getSelectedFile = new Button(servicescomp, SWT.PUSH);
 		getSelectedFile.setText("Get Selected File ");
@@ -54,9 +53,9 @@ public class TestView implements PidescoView {
 		Button filterWord = new Button(servicescomp, SWT.PUSH);
 		filterWord.setText("Filter Word ");
 		
-		cleanFilters.addListener(SWT.Selection, new Listener() {
+		getFilters.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
-				services.cleanAllFilters();
+				inputText(services.getAllFilters().toString());
 			}
 
 		});
