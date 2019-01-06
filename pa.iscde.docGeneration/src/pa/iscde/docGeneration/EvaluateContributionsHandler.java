@@ -31,6 +31,7 @@ public class EvaluateContributionsHandler {
 	public EvaluateContributionsHandler() {
 		for (IConfigurationElement e : config) {
 			if (e.getAttribute("StringName") != null) {
+				System.out.println(e.getAttribute("StringName"));
 				DocGenView.getInstance().addFilter(e.getAttribute("StringName"));
 			}
 		}
@@ -43,9 +44,7 @@ public class EvaluateContributionsHandler {
 	public void doubleClick(ArrayList<String> info, char type) {
 		try {
 			for (IConfigurationElement e : config) {
-
 				Object o = e.createExecutableExtension("DocGenExtensions");
-
 				if (o instanceof DocGenExtensions) {
 					((DocGenExtensions) o).doubleClick(info, type);
 				}

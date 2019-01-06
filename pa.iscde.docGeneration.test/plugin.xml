@@ -12,7 +12,8 @@
    <extension
          point="pa.iscde.docGeneration.ext">
       <client
-            DocGenExtensions="pa.iscde.docgeneration.test.TestActions"></client>
+            DocGenExtensions="pa.iscde.docgeneration.test.TestActions"
+            StringName="Private"></client>
    </extension>
 
 </plugin>

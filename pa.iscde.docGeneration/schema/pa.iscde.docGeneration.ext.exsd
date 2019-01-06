@@ -6,7 +6,11 @@
          <meta.schema plugin="pa.iscde.docGeneration" id="pa.iscde.docGeneration.ext" name="DocGen"/>
       </appinfo>
       <documentation>
-         [Enter description of this extension point.]
+         This point of extension provides 2 utilities:
+
+The extension component may send one or more String which will then be added the Doc Filter
+
+The extension component may implement a class to decide which will happen in case of a doubleclick on 1 of the view tables
       </documentation>
    </annotation>
 
@@ -17,7 +21,7 @@
          </appinfo>
       </annotation>
       <complexType>
-         <sequence>
+         <sequence minOccurs="1" maxOccurs="unbounded">
             <element ref="client"/>
          </sequence>
          <attribute name="point" type="string" use="required">

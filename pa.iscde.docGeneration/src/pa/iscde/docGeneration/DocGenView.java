@@ -49,13 +49,14 @@ public class DocGenView implements PidescoView {
 
 	private Map<MyCTabItem, File> openedfiles = new HashMap<MyCTabItem, File>();
 	private CTabFolder folders;
-	private EvaluateContributionsHandler extensions = new EvaluateContributionsHandler();
+	private EvaluateContributionsHandler extensions;
 	private Set<String> activefilters = new HashSet<String>();
 	private ArrayList<Button> filterchecks = new ArrayList<Button>();
 	private String searchword;
 
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
 		instance = this;
+		extensions = new EvaluateContributionsHandler();
 
 		// Component Icon Label
 		Label label = new Label(viewArea, SWT.NONE);
