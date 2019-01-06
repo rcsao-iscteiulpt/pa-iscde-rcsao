@@ -35,9 +35,8 @@ public class ServicesImpl implements DocGenServices {
 
 
 	@Override
-	public void cleanFilters() {
-		// TODO Auto-generated method stub
-		
+	public void cleanAllFilters() {
+		DocGenView.getInstance().ClearAllfilters();	
 	}
 
 }	

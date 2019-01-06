@@ -19,18 +19,25 @@ public class EvaluateContributionsHandler {
 
 	public EvaluateContributionsHandler() {
 		for (IConfigurationElement e : config) {
-			DocGenView.getInstance().addFilter(e.getAttribute("StringName"));
-		}
-	}
-	
-	
-	public void doubleClick(ArrayList<String> info) {
-		for (IConfigurationElement e : config) {
-			if (e instanceof DocGenExtensions) {
-				((DocGenExtensions) e).doubleClick(info);
+			if (e.getAttribute("StringName") != null) {
+				DocGenView.getInstance().addFilter(e.getAttribute("StringName"));
 			}
 		}
 	}
+
+	public void doubleClick(ArrayList<String> info, char type) {
+		try {
+			for (IConfigurationElement e : config) {
+
+				Object o = e.createExecutableExtension("DocGenExtensions");
+
+				if (o instanceof DocGenExtensions) {
+					((DocGenExtensions) o).doubleClick(info, type);
+				}
+			}
+		} catch (CoreException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
 }
-
-

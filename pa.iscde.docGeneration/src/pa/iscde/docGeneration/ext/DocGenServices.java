@@ -9,7 +9,7 @@ public interface DocGenServices {
 	/**
 	 * Opens documentation on a new tab for the given file if it isn't already open <br>
 	 * If it is, it selects the given file
-	 * @param File (non-null)
+	 * @param File f (non-null)
 	 */
 	void openFile(File f);
 	
@@ -28,7 +28,7 @@ public interface DocGenServices {
 	/**
 	 * Erases all apllied filters on the Documention View
 	 */
-	void cleanFilters();
+	void cleanAllFilters();
 	
 	
 

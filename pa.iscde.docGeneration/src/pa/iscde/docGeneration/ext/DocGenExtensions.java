@@ -5,8 +5,11 @@ import java.util.ArrayList;
 
 public interface DocGenExtensions {
 
-	default void doubleClick(ArrayList<String> info) {
-		
-	}
+	/**
+	 * 
+	 * @param info
+	 * @param type
+	 */
+	void doubleClick(ArrayList<String> info, char type);
 	
 }
