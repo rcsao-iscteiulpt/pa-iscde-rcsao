@@ -96,10 +96,6 @@ public class DocGenView implements PidescoView {
 			filterchecks.add(button);
 		}
 
-		// Creating Buttons
-		Button cancelSearch = new Button(filterscomp, SWT.PUSH | SWT.RIGHT);
-		cancelSearch.setText("Cancel SearchFilter  ");
-
 		Button resetFilters = new Button(filterscomp, SWT.PUSH | SWT.RIGHT);
 		resetFilters.setText("Reset All Filters ");
 
@@ -109,12 +105,6 @@ public class DocGenView implements PidescoView {
 				ClearAllfilters();
 			}
 
-		});
-
-		cancelSearch.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event e) {
-				removeFilter(searchword);
-			}
 		});
 
 		addButtonCheckListeners(filterchecks);
@@ -414,6 +404,14 @@ public class DocGenView implements PidescoView {
 			Listener l = new Listener() {
 				public void handleEvent(Event e) {
 					TableItem[] selection = t.getSelection();
+					
+					String word = selection[0].toString().replaceAll("(.*)[\\{]|[\\}](.*)", "");
+					FileScanner scanner = new FileScanner();
+					File selectedfile = openedfiles.get(folders.getSelection());
+					int offset = scanner.ScanforWord(selectedfile, word);
+					scanner.Select(selectedfile, offset, word.length());
+					
+					
 					ArrayList<String> info = new ArrayList<String>();
 
 					for (int i = 0; !selection[0].getText(i).equals(""); i++) {
@@ -422,11 +420,7 @@ public class DocGenView implements PidescoView {
 
 					extensions.doubleClick(info, type);
 
-					String word = selection[0].toString().replaceAll("(.*)[\\{]|[\\}](.*)", "");
-					FileScanner scanner = new FileScanner();
-					File selectedfile = openedfiles.get(folders.getSelection());
-					int offset = scanner.ScanforWord(selectedfile, word);
-					scanner.Select(selectedfile, offset, word.length());
+					
 				}
 			};
 			t.addListener(SWT.DefaultSelection, l);
