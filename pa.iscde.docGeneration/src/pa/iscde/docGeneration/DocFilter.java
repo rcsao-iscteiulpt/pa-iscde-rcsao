@@ -26,6 +26,9 @@ public class DocFilter implements Filter {
 	
 	@Override
 	public boolean accept(ConstructorInfo c) {
+		if(filterwords.isEmpty())
+			return true;
+		
 		int matches = 0;
 		for (String s : filterwords) {
 			for (Modifiers mod : c.getModifiers()) {
@@ -53,6 +56,9 @@ public class DocFilter implements Filter {
 	
 	@Override
 	public boolean accept(MethodInfo c) {
+		if(filterwords.isEmpty())
+			return true;
+		
 		int matches = 0;
 		for (String s : filterwords) {
 			for (Modifiers mod : c.getModifiers()) {
@@ -79,6 +85,9 @@ public class DocFilter implements Filter {
 	
 	@Override
 	public boolean accept(FieldInfo c) {
+		if(filterwords.isEmpty())
+			return true;
+		
 		int matches = 0;
 		for (String s : filterwords) {	
 			for (Modifiers mod : c.getModifiers()) {

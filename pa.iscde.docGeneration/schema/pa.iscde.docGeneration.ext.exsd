@@ -70,6 +70,16 @@ The extension component may implement a class to decide which will happen in cas
                </appinfo>
             </annotation>
          </attribute>
+         <attribute name="Filter" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":pa.iscde.docGeneration.ext.Filter"/>
+               </appinfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
