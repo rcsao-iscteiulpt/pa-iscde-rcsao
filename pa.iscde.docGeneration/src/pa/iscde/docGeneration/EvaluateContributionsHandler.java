@@ -36,7 +36,6 @@ public class EvaluateContributionsHandler {
 	public EvaluateContributionsHandler() {
 		for (IConfigurationElement e : config) {
 			if (e.getAttribute("StringName") != null) {
-				System.out.println(e.getAttribute("StringName"));
 				DocGenView.getInstance().addFilter(e.getAttribute("StringName"));
 			}
 		}
@@ -61,29 +60,26 @@ public class EvaluateContributionsHandler {
 		}
 	}
 
-	public boolean Filter(ConstructorInfo c) {
-		try {
-			for (IConfigurationElement e : config) {
-				Object o = e.createExecutableExtension("Filter");
-				if (o instanceof Filter) {
-					System.out.println("im here");
-					return ((Filter) o).accept(c);
-				}
-			}
-		} catch (CoreException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		return true;
-	}
 	
-	public boolean Filter(MethodInfo m) {
+	/**
+	 * Method to filter documentation according to the extension's defined conditions
+	 * @param f Object object that will be subject to the Extension filter conditions
+	 * @return a boolean that says if the object should be filtered or not
+	 */
+	public boolean Filter(Object f) {
 		try {
 			for (IConfigurationElement e : config) {
 				Object o = e.createExecutableExtension("Filter");
 				if (o instanceof Filter) {
-					System.out.println("im here");
-					return ((Filter) o).accept(m);
+					if (f instanceof MethodInfo) {
+						return ((Filter) o).accept((MethodInfo) f);
+					}
+					if (f instanceof ConstructorInfo) {
+						return ((Filter) o).accept((ConstructorInfo) f);
+					}
+					if (f instanceof FieldInfo) {
+						return ((Filter) o).accept((FieldInfo) f);
+					}
 				}
 			}
 		} catch (CoreException e1) {
@@ -92,20 +88,5 @@ public class EvaluateContributionsHandler {
 		}
 		return true;
 	}
-	
-	public boolean Filter(FieldInfo f) {
-		try {
-			for (IConfigurationElement e : config) {
-				Object o = e.createExecutableExtension("Filter");
-				if (o instanceof Filter) {
-					System.out.println("im here");
-					return ((Filter) o).accept(f);
-				}
-			}
-		} catch (CoreException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		return true;
-	}
+
 }

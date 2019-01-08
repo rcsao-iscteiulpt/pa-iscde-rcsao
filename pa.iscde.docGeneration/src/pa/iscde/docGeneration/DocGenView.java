@@ -61,7 +61,6 @@ public class DocGenView implements PidescoView {
 		instance = this;
 		extensions = new EvaluateContributionsHandler();
 
-
 		// Getting Search Component reference
 		ServiceReference<SearchService> refSearch = Activator.getInstance().getContext()
 				.getServiceReference(SearchService.class);
@@ -196,6 +195,8 @@ public class DocGenView implements PidescoView {
 			removeFilter(this.searchword);
 			this.searchword = searchWord;
 			addFilter(searchWord);
+		} else {
+			removeFilter(this.searchword);
 		}
 	}
 
@@ -250,7 +251,7 @@ public class DocGenView implements PidescoView {
 
 	/**
 	 * Class used for storing additional information about the tables and the
-	 * tab(class) name
+	 * tab name
 	 * 
 	 * @author Ricardo Silva
 	 *
@@ -334,10 +335,9 @@ public class DocGenView implements PidescoView {
 					}
 				} else {
 					if (extensions.Filter(f)) {
-						
 						TableItem newitem = new TableItem(fields, SWT.NONE);
 						newitem.setText(f.getFieldInfo());
-					}	
+					}
 				}
 			}
 
@@ -370,10 +370,9 @@ public class DocGenView implements PidescoView {
 					}
 				} else {
 					if (extensions.Filter(m)) {
-						
 						TableItem newitem = new TableItem(constructors, SWT.NONE);
 						newitem.setText(m.getConstructorInfo());
-					}	
+					}
 				}
 			}
 
@@ -408,10 +407,9 @@ public class DocGenView implements PidescoView {
 					}
 				} else {
 					if (extensions.Filter(m)) {
-						
 						TableItem newitem = new TableItem(methods, SWT.NONE);
 						newitem.setText(m.getMethodInfo());
-					}	
+					}
 				}
 			}
 
